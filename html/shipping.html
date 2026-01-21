@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarketMate Shipping</title>
+  <link rel="stylesheet" href="../css/shipping.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aoboshi+One&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome for search icon -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+</head>
+<body>
+ <div class="layout" id="layout">
+
+<aside class="sidebar" id="sidebar">
+      <!-- Top -->
+      <!-- Close button -->
+      <button class="close-btn" onclick="closeSidebar()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Menu -->
+      <ul class="menu">
+        <li>
+          <a href="home.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        </li>
+        <li>
+          <a href="order.html"><i class="fa-solid fa-box"></i> Orders</a>
+        </li>
+        <li>
+          <a href="customer.html"><i class="fa-solid fa-users"></i> Customers</a>
+        </li>
+        <li>
+          <a href="shipping.html"><i class="fa-solid fa-truck"></i> Shipping</a>
+        </li>
+        <li>
+          <a href="items.html"><i class="fa-solid fa-cubes"></i> Items</a>
+        </li>
+        <li>
+          <a href="reviews.html"><i class="fa-solid fa-star"></i> Reviews</a>
+        </li>
+        <li>
+          <a href="payments.html"><i class="fa-solid fa-store"></i> Payments</a>
+        </li>
+        <li>
+          <a href="rewards.html"><i class="fa-solid fa-gift"></i> Rewards</a>
+        </li>
+
+        <li class="section">Account</li>
+        <li>
+          <a href="home.html"><i class="fa-solid fa-house"></i> Home</a>
+        </li>
+
+        <li class="logout">
+          <a href="Sign-In.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </li>
+      </ul>
+    </aside>
+
+  <div class="content-wrapper">
+  <nav class="navbar">
+ <button class="open-btn" onclick="openSidebar()">
+  <i class="fa-solid fa-bars"></i>
+</button>
+
+  <img src="../images/MarketMate.png" class="logo" />
+
+  <div class="search-container">
+    <i class="fa fa-search"></i>
+    <input type="text" placeholder="Search" />
+  </div>
+
+  <div class="profile">
+    <img src="../images/ppft.png" />
+  </div>
+</nav>
+
+
+   <main class="main-content">
+  <div class="header-flex">
+    <h1>Shipping</h1>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Shipping ID</th>
+          <th>Order ID</th>
+          <th>Courier</th>
+          <th>Address</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SH123</td>
+          <td>ORD9023</td>
+          <td>J&T Express</td>
+          <td>Manila, PH</td>
+          <td><span class="status pending">Preparing</span></td>
+        </tr>
+        <tr>
+          <td>SH123</td>
+          <td>ORD9023</td>
+          <td>J&T Express</td>
+          <td>Quezon City, PH</td>
+          <td><span class="status delivered">Shipped</span></td>
+        </tr>
+        <tr>
+          <td>SH123</td>
+          <td>ORD9023</td>
+          <td>J&T Express</td>
+          <td>Calamba, PH</td>
+          <td><span class="status cancelled">Cancelled</span></td>
+        </tr>
+        <tr>
+          <td>SH123</td>
+          <td>ORD9023</td>
+          <td>J&T Express</td>
+          <td>Bulacan, PH</td>
+          <td><span class="status delivered">Shipped</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<div id="shippingModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeShippingModal()">&times;</span>
+    <h3>Update of Status for :</h3>
+    <p class="modal-order-id">Shipping ID : <span id="displayShippingId"></span></p>
+    
+    <div class="status-options">
+      <button class="btn-opt btn-shipped" onclick="selectShippingStatus('Shipped', 'shipped')">Shipped</button>
+      <button class="btn-opt btn-preparing" onclick="selectShippingStatus('Preparing', 'preparing')">Preparing</button>
+      <button class="btn-opt btn-cancelled" onclick="selectShippingStatus('Canceled', 'cancelled')">Canceled</button>
+    </div>
+
+    <button id="confirmShippingBtn" class="confirm-btn">Confirm</button>
+  </div>
+</div>
+
+
+ <script>
+  const sidebar = document.getElementById("sidebar");
+  const layout = document.getElementById("layout");
+
+  function closeSidebar() {
+    sidebar.classList.add("closed");
+    layout.classList.add("sidebar-closed");
+  }
+
+  function openSidebar() {
+    sidebar.classList.remove("closed");
+    layout.classList.remove("sidebar-closed");
+  }
+
+    let currentShippingSpan = null;
+    let selectedShipText = "";
+    let selectedShipClass = "";
+
+    // 1. Initialize click events for shipping status badges
+    document.querySelectorAll('.status').forEach(span => {
+      span.style.cursor = "pointer";
+      span.addEventListener('click', function() {
+        openShippingModal(this);
+      });
+    });
+
+    function openShippingModal(element) {
+      currentShippingSpan = element;
+      
+      // Get Shipping ID from the first column of the row
+      const row = element.closest('tr');
+      const shippingId = row.cells[0].innerText;
+      
+      document.getElementById('displayShippingId').innerText = shippingId;
+      document.getElementById('shippingModal').style.display = 'flex';
+    }
+
+    function closeShippingModal() {
+      document.getElementById('shippingModal').style.display = 'none';
+      // Clear selection highlights
+      document.querySelectorAll('.btn-opt').forEach(b => b.classList.remove('selected'));
+    }
+
+    function selectShippingStatus(text, className) {
+      selectedShipText = text;
+      selectedShipClass = className;
+      
+      // Highlight the clicked button
+      document.querySelectorAll('.btn-opt').forEach(b => b.classList.remove('selected'));
+      event.target.classList.add('selected');
+    }
+
+    // 2. Handle Confirm Click for Shipping
+    document.getElementById('confirmShippingBtn').addEventListener('click', () => {
+      if (currentShippingSpan && selectedShipText !== "") {
+        // Update text and classes in the table row
+        currentShippingSpan.innerText = selectedShipText;
+        currentShippingSpan.className = 'status ' + selectedShipClass;
+        
+        closeShippingModal();
+      } else {
+        alert("Please select a shipping status!");
+      }
+    });
+</script>
+
+
+</body>
+</html>

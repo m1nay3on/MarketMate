@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarketMate Reviews</title>
+  <link rel="stylesheet" href="../css/reviews.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aoboshi+One&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome for search icon -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+</head>
+<body>
+ <div class="layout" id="layout">
+
+<aside class="sidebar" id="sidebar">
+      <!-- Top -->
+      <!-- Close button -->
+      <button class="close-btn" onclick="closeSidebar()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Menu -->
+       <ul class="menu">
+        <li>
+          <a href="home.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        </li>
+        <li>
+          <a href="order.html"><i class="fa-solid fa-box"></i> Orders</a>
+        </li>
+        <li>
+          <a href="customer.html"><i class="fa-solid fa-users"></i> Customers</a>
+        </li>
+        <li>
+          <a href="shipping.html"><i class="fa-solid fa-truck"></i> Shipping</a>
+        </li>
+        <li>
+          <a href="items.html"><i class="fa-solid fa-cubes"></i> Items</a>
+        </li>
+        <li>
+          <a href="reviews.html"><i class="fa-solid fa-star"></i> Reviews</a>
+        </li>
+        <li>
+          <a href="payments.html"><i class="fa-solid fa-store"></i> Payments</a>
+        </li>
+        <li>
+          <a href="rewards.html"><i class="fa-solid fa-gift"></i> Rewards</a>
+        </li>
+
+        <li class="section">Account</li>
+        <li>
+          <a href="home.html"><i class="fa-solid fa-house"></i> Home</a>
+        </li>
+
+        <li class="logout">
+          <a href="Sign-In.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </li>
+      </ul>
+    </aside>
+
+  <div class="content-wrapper">
+  <nav class="navbar">
+ <button class="open-btn" onclick="openSidebar()">
+  <i class="fa-solid fa-bars"></i>
+</button>
+
+  <img src="../images/MarketMate.png" class="logo" />
+
+  <div class="search-container">
+    <i class="fa fa-search"></i>
+    <input type="text" placeholder="Search" />
+  </div>
+
+  <div class="profile">
+    <img src="../images/ppft.png" />
+  </div>
+</nav>
+
+<main class="main-content">
+  <h1 class="page-title">Reviews</h1>
+
+  <div class="review-card">
+    <div class="back-nav">
+      <i class="fa-solid fa-arrow-left"></i>
+    </div>
+
+    <div class="card-grid">
+      <div class="product-sidebar">
+        <div class="product-image-container">
+          <img src="iphonee.jpg" alt="iPhone 17 Pro Max" class="product-image">
+        </div>
+        <h2 class="product-title">Apple iPhone 17<br>Pro Max</h2>
+        <div class="main-rating">
+          <span class="star">★</span> 4.9 / 5.0
+        </div>
+      </div>
+
+      <div class="reviews-container">
+        <div class="review-box">
+          <div class="review-user">
+            <img src="ppft.png" alt="User" class="user-avatar">
+            <div class="user-info">
+              <span class="username">m1nayeon</span>
+              <span class="user-rating">★ 4.8 / 5.0</span>
+            </div>
+          </div>
+          <p class="review-meta">Product : iPhone 13 Pro Max</p>
+          <p class="review-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          </p>
+        </div>
+
+        <div class="review-box">
+          <div class="review-user">
+            <img src="ppft.png" alt="User" class="user-avatar">
+            <div class="user-info">
+              <span class="username">m1nayeon</span>
+              <span class="user-rating">★ 4.8 / 5.0</span>
+            </div>
+          </div>
+          <p class="review-meta">Product : iPhone 13 Pro Max</p>
+          <p class="review-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          </p>
+        </div>
+
+         <div class="review-box">
+          <div class="review-user">
+            <img src="ppft.png" alt="User" class="user-avatar">
+            <div class="user-info">
+              <span class="username">m1nayeon</span>
+              <span class="user-rating">★ 4.8 / 5.0</span>
+            </div>
+          </div>
+          <p class="review-meta">Product : iPhone 13 Pro Max</p>
+          <p class="review-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          </p>
+        </div>
+
+         <div class="review-box">
+          <div class="review-user">
+            <img src="ppft.png" alt="User" class="user-avatar">
+            <div class="user-info">
+              <span class="username">m1nayeon</span>
+              <span class="user-rating">★ 4.8 / 5.0</span>
+            </div>
+          </div>
+          <p class="review-meta">Product : iPhone 13 Pro Max</p>
+          <p class="review-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          </p>
+        </div>
+        
+        </div>
+    </div>
+  </div>
+</main>
+
+
+
+
+ <script>
+  const sidebar = document.getElementById("sidebar");
+  const layout = document.getElementById("layout");
+
+  function closeSidebar() {
+    sidebar.classList.add("closed");
+    layout.classList.add("sidebar-closed");
+  }
+
+  function openSidebar() {
+    sidebar.classList.remove("closed");
+    layout.classList.remove("sidebar-closed");
+  }
+</script>
+
+
+</body>
+</html>

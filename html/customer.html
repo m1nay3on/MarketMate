@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarketMate Customer</title>
+  <link rel="stylesheet" href="/css/customer.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aoboshi+One&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome for search icon -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+</head>
+<body>
+ <div class="layout" id="layout">
+
+<aside class="sidebar" id="sidebar">
+      <!-- Top -->
+      <!-- Close button -->
+      <button class="close-btn" onclick="closeSidebar()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Menu -->
+     <ul class="menu">
+        <li>
+          <a href="home.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        </li>
+        <li>
+          <a href="order.html"><i class="fa-solid fa-box"></i> Orders</a>
+        </li>
+        <li>
+          <a href="customer.html"><i class="fa-solid fa-users"></i> Customers</a>
+        </li>
+        <li>
+          <a href="shipping.html"><i class="fa-solid fa-truck"></i> Shipping</a>
+        </li>
+        <li>
+          <a href="items.html"><i class="fa-solid fa-cubes"></i> Items</a>
+        </li>
+        <li>
+          <a href="reviews.html"><i class="fa-solid fa-star"></i> Reviews</a>
+        </li>
+        <li>
+          <a href="payments.html"><i class="fa-solid fa-store"></i> Payments</a>
+        </li>
+        <li>
+          <a href="rewards.html"><i class="fa-solid fa-gift"></i> Rewards</a>
+        </li>
+
+        <li class="section">Account</li>
+        <li>
+          <a href="home.html"><i class="fa-solid fa-house"></i> Home</a>
+        </li>
+
+        <li class="logout">
+          <a href="Sign-In.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </li>
+      </ul>
+    </aside>
+
+  <div class="content-wrapper">
+  <nav class="navbar">
+ <button class="open-btn" onclick="openSidebar()">
+  <i class="fa-solid fa-bars"></i>
+</button>
+
+  <img src="../images/MarketMate.png" class="logo" />
+
+  <div class="search-container">
+    <i class="fa fa-search"></i>
+    <input type="text" placeholder="Search" />
+  </div>
+
+  <div class="profile">
+    <img src="../images/ppft.png" />
+  </div>
+</nav>
+
+
+   <main class="main-content">
+  <div class="header-flex">
+    <h1>Customer Information</h1>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Customer ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Address</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CUST213</td>
+          <td>Matthew Bote</td>
+          <td>rawr@gmail.com</td>
+          <td>Hawkins</td>
+          <td><span class="status delivered">Shipped</span></td>
+
+        </tr>
+        <tr>
+          <td>CUST213</td>
+          <td>JC Pogi</td>
+          <td>rawr@gmail.com</td>
+          <td>Hawkins</td>
+          <td><span class="status pending">Pending</span></td>
+        </tr>
+        <tr>
+          <td>CUST213</td>
+          <td>Isaiah</td>
+          <td>rawr@gmail.com</td>
+          <td>Hawkins</td>
+          <td><span class="status delivered">Shipped</span></td>
+        </tr>
+        <tr>
+          <td>CUST213</td>
+          <td>Sean</td>
+          <td>rawr@gmail.com</td>
+          <td>Hawkins</td>
+          <td><span class="status cancelled">Cancelled</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+
+ <script>
+  const sidebar = document.getElementById("sidebar");
+  const layout = document.getElementById("layout");
+
+  function closeSidebar() {
+    sidebar.classList.add("closed");
+    layout.classList.add("sidebar-closed");
+  }
+
+  function openSidebar() {
+    sidebar.classList.remove("closed");
+    layout.classList.remove("sidebar-closed");
+  }
+</script>
+
+
+</body>
+</html>

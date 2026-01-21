@@ -1,0 +1,390 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Aoboshi One', serif;
+}
+
+body {
+  background-image:
+    linear-gradient(135deg, #000000, #EAE0CF);
+}
+
+/* Ensure the wrapper takes up the full width minus the sidebar */
+.content-wrapper {
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* Prevents flex children from overflowing */
+}
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: #1f2f3f;
+  display: flex;
+  align-items: center;
+  padding: 0 25px;
+  z-index: 1000;
+    gap: 15px;
+
+}
+
+
+/* Logo */
+.logo {
+  width: 165px;
+  margin-left: 6px;
+}
+
+
+/* Search */
+.search-container {
+  flex: 1;
+  max-width: 1100px; /* control size */
+  position: relative;
+  margin-left: auto; /* PUSHES IT RIGHT */
+  margin-right: 20px; /* space before profile */
+}
+
+
+.search-container input {
+  width: 100%;
+  padding: 10px 40px;
+  border-radius: 4px;
+  border: 2px solid #2aa8ff;
+  outline: none;
+  font-size: 14px;
+  padding-right: 50px;
+}
+
+.search-container i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #555;
+}
+
+/* Profile */
+.profile img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-right: 35px;
+  
+}
+
+
+body {
+  background: #0e1a24;
+}
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 80px;                 /* SAME AS NAVBAR HEIGHT */
+  width: 260px;
+  height: calc(100vh - 80px); /* prevent overflow */
+  background: #f9f4ea;
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+  z-index: 900;
+}
+
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+
+/* Close button */
+.close-btn {
+  position: absolute;
+  right: -18px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #1f2f3f;
+  color: white;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.open-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 26px;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+/* Menu */
+.menu {
+  list-style: none;
+  padding: 20px;
+}
+
+.menu li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.menu li i {
+  width: 18px;
+}
+
+.menu li:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+}
+
+.section {
+  margin-top: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+  cursor: default;
+}
+
+.logout {
+  margin-top: 40px;
+  color: #b00020;
+}
+
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+
+.layout.sidebar-closed .main-content {
+  margin-left: 0;
+}
+
+
+/* Main Layout Positioning */
+.main-content {
+  margin-top: 80px; /* Space for Navbar */
+  margin-left: 260px; /* Space for Sidebar */
+  padding: 40px;
+  background-color: #e9dfcf; /* Light beige background */
+  min-height: calc(100vh - 80px);
+  transition: margin-left 0.3s ease;
+}
+
+/* Ensure the links take up the full space of the list item */
+.menu li {
+  padding: 0; /* Remove padding from li so the link can fill it */
+}
+
+.menu li a {
+  text-decoration: none; /* Remove underline */
+  color: inherit;       /* Keep the original text color */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;    /* Move padding here so the whole area is clickable */
+  width: 100%;
+  transition: background 0.3s ease;
+}
+
+.menu li a i {
+  width: 20px;
+  text-align: center;
+}
+
+/* Move your hover effect to the anchor tag */
+.menu li a:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+}
+
+/* Ensure Logout link stays red */
+.logout a {
+  color: #b00020 !important;
+}
+
+/* Adjust layout when sidebar is closed */
+.layout.sidebar-closed .main-content {
+  margin-left: 0;
+}
+
+/* Header */
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.header-row h1 {
+  font-size: 32px;
+  color: #000;
+}
+
+/* Stats Cards */
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  position: relative;
+}
+
+.stat-card.primary {
+  background: #004d66;
+  color: white;
+}
+
+.stat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin: 0 auto 10px;
+}
+
+.green { background: #2ecc71; }
+.yellow { background: #f1c40f; }
+.red { background: #e74c3c; }
+
+.stat-value {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.stat-label {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* Table Styles */
+.table-container {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: white;
+  padding: 15px;
+  text-align: left;
+  font-size: 14px;
+  color: #888;
+  border-bottom: 2px solid #eee;
+}
+
+td {
+  padding: 15px;
+  font-size: 13px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 5px 15px;
+  border-radius: 15px;
+  font-size: 11px;
+  color: white;
+  display: inline-block;
+  width: 80px;
+  text-align: center;
+}
+
+.status-badge.pending { background: #ff9f43; }
+.status-badge.paid { background: #00ff00; color: #000; font-weight: bold; }
+
+
+/* Modal Overlay Base */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+}
+
+/* Payment Modal Box */
+.payment-modal {
+  background-color: #d1d1d1;
+  padding: 40px;
+  border-radius: 20px;
+  width: 450px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.modal-id-text {
+  margin: 15px 0 25px;
+  font-weight: bold;
+}
+
+/* Status Option Buttons */
+.status-options {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.btn-opt {
+  padding: 10px 25px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.btn-new { background-color: #00ff22; color: #000; }
+.btn-pending { background-color: #ffaa66; color: #000; }
+
+.btn-opt.selected {
+  outline: 3px solid #004d66;
+  transform: scale(1.05);
+}
+
+/* Dark Blue Confirm Button */
+.confirm-btn {  
+  background-color: #004d66;
+  color: white;
+  padding: 10px 40px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+

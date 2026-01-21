@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarketMate Rewards</title>
+  <link rel="stylesheet" href="../css/rewards.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aoboshi+One&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome for search icon -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+</head>
+<body>
+ <div class="layout" id="layout">
+
+<aside class="sidebar" id="sidebar">
+      <!-- Top -->
+      <!-- Close button -->
+      <button class="close-btn" onclick="closeSidebar()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Menu -->
+       <ul class="menu">
+        <li>
+          <a href="home.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        </li>
+        <li>
+          <a href="order.html"><i class="fa-solid fa-box"></i> Orders</a>
+        </li>
+        <li>
+          <a href="customer.html"><i class="fa-solid fa-users"></i> Customers</a>
+        </li>
+        <li>
+          <a href="shipping.html"><i class="fa-solid fa-truck"></i> Shipping</a>
+        </li>
+        <li>
+          <a href="items.html"><i class="fa-solid fa-cubes"></i> Items</a>
+        </li>
+        <li>
+          <a href="reviews.html"><i class="fa-solid fa-star"></i> Reviews</a>
+        </li>
+        <li>
+          <a href="payments.html"><i class="fa-solid fa-store"></i> Payments</a>
+        </li>
+        <li>
+          <a href="rewards.html"><i class="fa-solid fa-gift"></i> Rewards</a>
+        </li>
+
+        <li class="section">Account</li>
+        <li>
+          <a href="home.html"><i class="fa-solid fa-house"></i> Home</a>
+        </li>
+
+        <li class="logout">
+          <a href="Sign-In.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </li>
+      </ul>
+    </aside>
+
+  <div class="content-wrapper">
+  <nav class="navbar">
+ <button class="open-btn" onclick="openSidebar()">
+  <i class="fa-solid fa-bars"></i>
+</button>
+
+  <img src="../images/MarketMate.png" class="logo" />
+
+  <div class="search-container">
+    <i class="fa fa-search"></i>
+    <input type="text" placeholder="Search" />
+  </div>
+
+  <div class="profile">
+    <img src="../images/ppft.png" />
+  </div>
+</nav>
+
+
+   <main class="main-content">
+  <div class="header-flex">
+    <h1>Rewards</h1>
+    <button class="add-btn">
+    <i class="fa-solid fa-plus"></i> 
+    </button>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Rewards</th>
+          <th>Type</th>
+          <th>Code</th>
+          <th>Discount</th>
+          <th>Validity Period</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>REW-30001</td>
+          <td>Voucher</td>
+          <td>m1nay3on</td>
+          <td>-100</td>
+          <td>December 31, 2027</td>
+          <td><span class="status delivered">Valid</span></td>
+        </tr>
+        <tr>
+          <td>REW-30001</td>
+          <td>Voucher</td>
+          <td>-m1nay3on</td>
+          <td>-100</td>
+          <td>December 31, 2027</td>
+          <td><span class="status cancelled">Expired</span></td>
+        </tr>
+        <tr>
+          <td>REW-30001</td>
+          <td>Voucher</td>
+          <td>-m1nay3on</td>
+          <td>-100</td>
+          <td>December 31, 2027</td>
+          <td><span class="status delivered">Valid</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<div id="addRewardModal" class="modal">
+  <div class="modal-content reward-modal">
+    <span class="close-modal" onclick="closeRewardModal()">&times;</span>
+    <h2>Add Reward</h2>
+    
+    <div class="form-group">
+      <label>Reward ID</label>
+      <input type="text" id="rewardId" placeholder="REW-30001">
+    </div>
+    
+    <div class="form-group">
+      <label>Type</label>
+      <input type="text" id="rewardType" placeholder="Voucher">
+    </div>
+    
+    <div class="form-group">
+      <label>Code</label>
+      <input type="text" id="rewardCode" placeholder="m1nay3on">
+    </div>
+    
+    <div class="form-group">
+      <label>Discount</label>
+      <input type="text" id="rewardDiscount" placeholder="-100">
+    </div>
+    
+    <div class="form-group">
+      <label>Validity Period</label>
+      <input type="text" id="rewardValidity" placeholder="December 31, 2027">
+    </div>
+
+    <button class="create-btn" onclick="addNewReward()">Create</button>
+  </div>
+</div>
+
+
+ <script>
+  const sidebar = document.getElementById("sidebar");
+  const layout = document.getElementById("layout");
+
+  function closeSidebar() {
+    sidebar.classList.add("closed");
+    layout.classList.add("sidebar-closed");
+  }
+
+  function openSidebar() {
+    sidebar.classList.remove("closed");
+    layout.classList.remove("sidebar-closed");
+  }
+
+    const rewardModal = document.getElementById("addRewardModal");
+    const addBtn = document.querySelector(".add-btn");
+
+    // Open Modal
+    addBtn.onclick = function() {
+      rewardModal.style.display = "flex";
+    }
+
+    // Close Modal
+    function closeRewardModal() {
+      rewardModal.style.display = "none";
+    }
+
+    // Function to add the new row to the table
+    function addNewReward() {
+      // Get values from inputs
+      const id = document.getElementById("rewardId").value;
+      const type = document.getElementById("rewardType").value;
+      const code = document.getElementById("rewardCode").value;
+      const discount = document.getElementById("rewardDiscount").value;
+      const validity = document.getElementById("rewardValidity").value;
+
+      if (id && type && code) {
+        const tableBody = document.querySelector("tbody");
+        
+        // Create new row
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
+          <td>${id}</td>
+          <td>${type}</td>
+          <td>${code}</td>
+          <td>${discount}</td>
+          <td>${validity}</td>
+          <td><span class="status delivered">Valid</span></td>
+        `;
+
+        // Append to table
+        tableBody.appendChild(newRow);
+
+        // Clear inputs and close modal
+        document.querySelectorAll(".form-group input").forEach(input => input.value = "");
+        closeRewardModal();
+      } else {
+        alert("Please fill in the required fields!");
+      }
+    }
+
+    // Close if clicking outside the modal content
+    window.onclick = function(event) {
+      if (event.target == rewardModal) {
+        closeRewardModal();
+      }
+    }
+</script>
+
+
+</body>
+</html>

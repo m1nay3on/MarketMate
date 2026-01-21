@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarketMate Order</title>
+  <link rel="stylesheet" href="../css/order.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aoboshi+One&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome for search icon -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+</head>
+<body>
+ <div class="layout" id="layout">
+
+<aside class="sidebar" id="sidebar">
+      <!-- Top -->
+      <!-- Close button -->
+      <button class="close-btn" onclick="closeSidebar()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Menu -->
+       <ul class="menu">
+        <li>
+          <a href="home.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        </li>
+        <li>
+          <a href="order.html"><i class="fa-solid fa-box"></i> Orders</a>
+        </li>
+        <li>
+          <a href="customer.html"><i class="fa-solid fa-users"></i> Customers</a>
+        </li>
+        <li>
+          <a href="shipping.html"><i class="fa-solid fa-truck"></i> Shipping</a>
+        </li>
+        <li>
+          <a href="items.html"><i class="fa-solid fa-cubes"></i> Items</a>
+        </li>
+        <li>
+          <a href="reviews.html"><i class="fa-solid fa-star"></i> Reviews</a>
+        </li>
+        <li>
+          <a href="payments.html"><i class="fa-solid fa-store"></i> Payments</a>
+        </li>
+        <li>
+          <a href="rewards.html"><i class="fa-solid fa-gift"></i> Rewards</a>
+        </li>
+
+        <li class="section">Account</li>
+        <li>
+          <a href="home.html"><i class="fa-solid fa-house"></i> Home</a>
+        </li>
+
+        <li class="logout">
+          <a href="Sign-In.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </li>
+      </ul>
+    </aside>
+
+  <div class="content-wrapper">
+  <nav class="navbar">
+ <button class="open-btn" onclick="openSidebar()">
+  <i class="fa-solid fa-bars"></i>
+</button>
+
+  <img src="../images/MarketMate.png" class="logo" />
+
+  <div class="search-container">
+    <i class="fa fa-search"></i>
+    <input type="text" placeholder="Search" />
+  </div>
+
+  <div class="profile">
+    <img src="../images/ppft.png" />
+  </div>
+</nav>
+
+
+   <main class="main-content">
+  <div class="header-flex">
+    <h1>Orders</h1>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer Name</th>
+          <th>Item ID</th>
+          <th>Address</th>
+          <th>Payment Method</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>#1001</td>
+          <td>Juan Dela Cruz</td>
+          <td>ITEM-992</td>
+          <td>Manila, PH</td>
+          <td>GCash</td>
+          <td><span class="status shipped">Shipped</span></td>
+
+        </tr>
+        <tr>
+          <td>#1002</td>
+          <td>Maria Clara</td>
+          <td>ITEM-451</td>
+          <td>Quezon City, PH</td>
+          <td>COD</td>
+          <td><span class="status pending">Pending</span></td>
+        </tr>
+        <tr>
+          <td>#1003</td>
+          <td>Jose Rizal</td>
+          <td>ITEM-102</td>
+          <td>Calamba, PH</td>
+          <td>Card</td>
+          <td><span class="status shipped">Shipped</span></td>
+        </tr>
+        <tr>
+          <td>#1004</td>
+          <td>Sisa Santos</td>
+          <td>ITEM-005</td>
+          <td>Bulacan, PH</td>
+          <td>GCash</td>
+          <td><span class="status cancelled">Cancelled</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<div id="statusModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeModal()">&times;</span>
+    <h3>Update of Status for :</h3>
+    <p class="modal-order-id">Order ID : <span id="displayOrderId"></span></p>
+    
+    <div class="status-options">
+      <button class="btn-opt btn-new" onclick="selectStatus('New', 'new')">New</button>
+      <button class="btn-opt btn-pending" onclick="selectStatus('Pending', 'pending')">Pending</button>
+      <button class="btn-opt btn-cancelled" onclick="selectStatus('Cancelled', 'cancelled')">Cancelled</button>
+    </div>
+
+    <button id="confirmBtn" class="confirm-btn">Confirm</button>
+  </div>
+</div>
+
+
+ <script>
+  const sidebar = document.getElementById("sidebar");
+  const layout = document.getElementById("layout");
+
+  function closeSidebar() {
+    sidebar.classList.add("closed");
+    layout.classList.add("sidebar-closed");
+  }
+
+  function openSidebar() {
+    sidebar.classList.remove("closed");
+    layout.classList.remove("sidebar-closed");
+  }
+
+  let currentTargetSpan = null; // Keeps track of which row we are editing
+  let selectedStatusText = "";
+  let selectedStatusClass = "";
+
+  // 1. Attach click events to all status badges
+  document.querySelectorAll('.status').forEach(span => {
+    span.style.cursor = "pointer"; // Make it look clickable
+    span.addEventListener('click', function() {
+      openModal(this);
+    });
+  });
+
+  function openModal(element) {
+    currentTargetSpan = element;
+    
+    // Get Order ID from the first column of the current row
+    const row = element.closest('tr');
+    const orderId = row.cells[0].innerText;
+    
+    document.getElementById('displayOrderId').innerText = orderId;
+    document.getElementById('statusModal').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('statusModal').style.display = 'none';
+    // Reset selection
+    document.querySelectorAll('.btn-opt').forEach(b => b.classList.remove('selected'));
+  }
+
+  function selectStatus(text, className) {
+    selectedStatusText = text;
+    selectedStatusClass = className;
+    
+    // Visual feedback for selection
+    document.querySelectorAll('.btn-opt').forEach(b => b.classList.remove('selected'));
+    event.target.classList.add('selected');
+  }
+
+  // 2. Handle Confirm Click
+  document.getElementById('confirmBtn').addEventListener('click', () => {
+    if (currentTargetSpan && selectedStatusText !== "") {
+      // Update the text
+      currentTargetSpan.innerText = selectedStatusText;
+      
+      // Update the class (remove old status classes, add new one)
+      currentTargetSpan.className = 'status ' + selectedStatusClass;
+      
+      closeModal();
+    } else {
+      alert("Please select a status first!");
+    }
+  });
+
+  // Close modal if clicking outside the box
+  window.onclick = function(event) {
+    const modal = document.getElementById('statusModal');
+    if (event.target == modal) {
+      closeModal();
+    }
+  }
+</script>
+
+
+</body>
+</html>
