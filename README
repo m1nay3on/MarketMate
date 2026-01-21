@@ -1,37 +1,36 @@
-🛒 MarketMate
+# 🛒 MarketMate
 
-MarketMate is a web-based e-commerce platform that allows users to buy and sell products online. It is designed to provide a simple and accessible marketplace experience using modern web technologies and a database-driven backend.
+MarketMate is a web-based **e-commerce platform** that allows users to sell and purchase products online. The platform is designed to provide a simple, user-friendly marketplace experience while showcasing full-stack web development skills.
 
-This project was developed as an academic project and demonstrates full-stack web development, including front-end design, back-end logic, and database integration.
+This project integrates front-end design, back-end logic, and database management into one functional system.
 
-🚀 Features
+---
 
-User-friendly product listing and browsing
+## 🚀 Features
 
-Seller product management
+- Product listing and browsing
+- Seller product management
+- Dynamic website behavior using JavaScript
+- Backend processing with Python
+- MySQL database integration
+- Clean and responsive user interface
 
-Dynamic content using JavaScript
+---
 
-Backend processing with Python
+## 🛠️ Tech Stack
 
-Data storage and management using MySQL
+**Frontend**
+- HTML  
+- CSS  
+- JavaScript  
 
-Responsive and clean user interface
+**Backend**
+- Python  
 
-🛠️ Tech Stack
+**Database**
+- MySQL  
 
-Frontend
+---
 
-HTML
+## 📂 Project Structure
 
-CSS
-
-JavaScript
-
-Backend
-
-Python
-
-Database
-
-MySQL
