@@ -169,7 +169,6 @@ body {
 .section {
   margin-top: 20px;
   font-size: 14px;
-  font-weight: bold;
   color: #555;
   cursor: default;
 }
@@ -266,7 +265,6 @@ tr:hover {
   padding: 5px 12px;
   border-radius: 20px;
   font-size: 12px;
-  font-weight: bold;
 }
 
 .status.delivered { background: #e6ffed; color: #28a745; }
@@ -321,7 +319,6 @@ tr:hover {
   top: 15px;
   font-size: 24px;
   cursor: pointer;
-  font-weight: bold;
 }
 
 /* Modal Styling */
@@ -346,7 +343,6 @@ tr:hover {
   display: block;
   font-size: 14px;
   margin-bottom: 5px;
-  font-weight: bold;
 }
 
 .form-group input {
@@ -368,7 +364,6 @@ tr:hover {
   cursor: pointer;
   display: block;
   margin: 20px auto 0;
-  font-weight: bold;
 }
 
 .create-btn:hover {

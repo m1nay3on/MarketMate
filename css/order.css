@@ -137,7 +137,6 @@ body {
   gap: 12px;
   padding: 12px 8px;
   cursor: pointer;
-  font-weight: 500;
 }
 
 .menu li i {
@@ -152,7 +151,6 @@ body {
 .section {
   margin-top: 20px;
   font-size: 14px;
-  font-weight: bold;
   color: #555;
   cursor: default;
 }
@@ -280,10 +278,8 @@ tr:hover {
   padding: 5px 12px;
   border-radius: 20px;
   font-size: 12px;
-  font-weight: bold;
 }
 
-.status.delivered { background: #e6ffed; color: #28a745; }
 .status.pending { background: #fff9db; color: #f08c00; }
 .status.shipped { background: #e7f5ff; color: #228be6; }
 .status.cancelled { background: #fff5f5; color: #fa5252; }
@@ -320,12 +316,10 @@ tr:hover {
   top: 15px;
   font-size: 24px;
   cursor: pointer;
-  font-weight: bold;
 }
 
 .modal-order-id {
   margin: 15px 0;
-  font-weight: bold;
 }
 
 /* Status Button Container */
@@ -335,30 +329,27 @@ tr:hover {
   margin: 25px 0;
 }
 
+/* Modal Status Buttons */
 .btn-opt {
-  padding: 10px 25px;
-  border-radius: 15px;
+  padding: 10px 18px;
+  border-radius: 20px;
   border: none;
-  color: black;
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  transition: transform 0.2s, opacity 0.2s;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
 }
+
 
 .btn-opt:hover { opacity: 0.8; }
 .btn-opt.selected { transform: scale(1.1); border: 2px solid #333; }
 
 /* Specific Colors from Screenshot */
-.status.btn-new { background-color: #00ff22; }
 .btn-pending { background-color: #ffaa66; }
 .btn-cancelled { background-color: #ff0000; color: white; }
 /* This handles the label inside the table */
 
-.status.new { 
-  background-color: #00ff22; 
-  color: black;
-}
+
 
 .confirm-btn {
   background-color: #074a61;
@@ -368,4 +359,43 @@ tr:hover {
   border: none;
   cursor: pointer;
   font-size: 16px;
+}
+
+
+/* 1. This changes the "New" badge inside the Table */
+.status.new { 
+  background-color: #e6ffed; /* Light green background (like the shipped blue) */
+  color: #28a745;            /* Dark green text (like the shipped blue) */
+}
+
+/* 2. This changes the "New" button inside the Modal */
+.btn-opt.btn-new {
+  background-color: #e6ffed; /* Light green background */
+  color: #28a745;            /* Dark green text */
+}
+
+/* 3. Updated hover effect for the modal button */
+.btn-opt.btn-new:hover {
+  background-color: #d1f7db; /* Slightly darker green on hover */
+  color: #28a745;
+  opacity: 1;
+}
+
+
+.btn-pending {
+  background-color: #fff9db;
+  color: #f08c00;
+}
+
+.btn-pending:hover {
+  background-color: #ffe066;
+}
+
+.btn-cancelled {
+  background-color: #fff5f5;
+  color: #fa5252;
+}
+
+.btn-cancelled:hover {
+  background-color: #ffe3e3;
 }

@@ -138,7 +138,6 @@ body {
   gap: 12px;
   padding: 12px 8px;
   cursor: pointer;
-  font-weight: 500;
 }
 
 .menu li i {
@@ -153,7 +152,6 @@ body {
 .section {
   margin-top: 20px;
   font-size: 14px;
-  font-weight: bold;
   color: #555;
   cursor: default;
 }
@@ -295,7 +293,6 @@ tr:hover {
 /* Header styling */
 .header-flex h1 {
   font-size: 2.5rem;
-  font-weight: bold;
 }
 
 .add-item-btn {
@@ -420,7 +417,7 @@ tr:hover {
 
 .item-modal {
   background-color: #d1d1d1;
-  width: 850px;
+  width: 900px;
   padding: 40px;
   border-radius: 20px;
   position: relative;
@@ -433,15 +430,66 @@ tr:hover {
 
 .modal-form { flex: 1; }
 
-.modal-form h2 { margin-bottom: 20px; font-size: 28px; }
+/* Modal Form Styling */
+.modal-form h2 {
+  font-size: 32px;
+  margin-bottom: 25px;
+}
 
+/* Update this specific selector in your CSS */
 .form-group textarea {
   width: 100%;
-  height: 100px;
-  padding: 10px;
-  border-radius: 5px;
+  height: 150px; /* Adjust this value to make it taller */
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  resize: none; /* Prevents user from manually resizing and breaking your layout */
+  font-family: inherit; /* Ensures the font matches your inputs */
+}
+.form-group label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.form-group input, 
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px; /* Matches the sharp but slightly rounded corners in Pic 1 */
+  font-size: 14px;
+  background-color: white;
+  
+}
+
+/* Update these specific selectors in your CSS */
+
+.variant-input {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+  width: 100%; /* Ensures the container itself is full width */
+}
+
+.variant-input input {
+  flex: 1; /* This is the key: it forces the input to take up all remaining space */
+}
+
+.add-variant-btn {
+  flex-shrink: 0; /* Ensures the button doesn't get squished */
+  background-color: #1f2f3f;
+  color: white;
   border: none;
-  resize: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Image Section */
@@ -452,6 +500,7 @@ tr:hover {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: 95px;
 }
 
 .image-preview-box {
@@ -460,10 +509,26 @@ tr:hover {
   border-radius: 15px;
   margin-bottom: 10px;
   width: 100%;
-  height: 250px;
+  height: 300px; /* Increased height */
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.btn-upload, .btn-delete-img, .btn-submit-item {
+  font-size: 14px;
+  transition: transform 0.1s;
+}
+
+.btn-upload { background: #004d61; } /* Darker teal */
+.btn-delete-img { background: #ff0000; } /* Bright red */
+
+.btn-submit-item {
+  width: 60%; /* Makes the "Add Item" button wide like in the pic */
+  background: #004d61;
+  padding: 15px;
+  font-size: 16px;
 }
 
 .image-preview-box img { max-height: 100%; max-width: 100%; }
@@ -479,7 +544,6 @@ tr:hover {
   border-radius: 20px;
   border: none;
   color: white;
-  font-weight: bold;
   cursor: pointer;
 }
 
@@ -492,7 +556,7 @@ tr:hover {
   padding: 12px 30px;
   border-radius: 25px;
   border: none;
-  font-weight: bold;
   margin-top: 20px;
   cursor: pointer;
 }
+

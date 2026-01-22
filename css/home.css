@@ -9,7 +9,7 @@ body {
   background-image:
     linear-gradient(135deg, #000000, #EAE0CF);
 }
-
+  
 
 /* Ensure the wrapper takes up the full width minus the sidebar */
 .content-wrapper {
@@ -139,7 +139,6 @@ body {
   gap: 12px;
   padding: 12px 8px;
   cursor: pointer;
-  font-weight: 500;
 }
 
 .menu li i {
@@ -154,7 +153,6 @@ body {
 .section {
   margin-top: 20px;
   font-size: 14px;
-  font-weight: bold;
   color: #555;
   cursor: default;
 }
@@ -363,12 +361,10 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 12px;
-  font-weight: bold;
 }
 
 .circle small {
   font-size: 9px;
-  font-weight: normal;
 }
 
 /* This was the main culprit for the big container */
@@ -410,7 +406,6 @@ body {
   width: 80px;
   height: 80px;
   font-size: 28px;
-  font-weight: bold;
   background: #003e59;
   color: white;
   padding: 20px;

@@ -137,7 +137,6 @@ body {
   gap: 12px;
   padding: 12px 8px;
   cursor: pointer;
-  font-weight: 500;
 }
 
 .menu li i {
@@ -152,7 +151,6 @@ body {
 .section {
   margin-top: 20px;
   font-size: 14px;
-  font-weight: bold;
   color: #555;
   cursor: default;
 }
@@ -281,7 +279,6 @@ tr:hover {
   padding: 5px 12px;
   border-radius: 20px;
   font-size: 12px;
-  font-weight: bold;
 }
 
 .status.delivered { background: #e6ffed; color: #28a745; }
@@ -342,7 +339,6 @@ tr:hover {
 
 .main-rating {
   font-size: 18px;
-  font-weight: bold;
 }
 
 .star {
@@ -385,7 +381,6 @@ tr:hover {
 
 .username {
   font-size: 14px;
-  font-weight: bold;
 }
 
 .user-rating {
@@ -395,7 +390,6 @@ tr:hover {
 
 .review-meta {
   font-size: 14px;
-  font-weight: bold;
   margin-bottom: 8px;
 }
 

@@ -138,7 +138,6 @@ body {
   gap: 12px;
   padding: 12px 8px;
   cursor: pointer;
-  font-weight: 500;
 }
 
 .menu li i {
@@ -153,7 +152,6 @@ body {
 .section {
   margin-top: 20px;
   font-size: 14px;
-  font-weight: bold;
   color: #555;
   cursor: default;
 }
@@ -282,7 +280,6 @@ tr:hover {
   padding: 5px 12px;
   border-radius: 20px;
   font-size: 12px;
-  font-weight: bold;
 }
 
 .status.delivered { background: #e6ffed; color: #28a745; }
@@ -322,12 +319,10 @@ tr:hover {
   top: 15px;
   font-size: 24px;
   cursor: pointer;
-  font-weight: bold;
 }
 
 .modal-order-id {
   margin: 15px 0;
-  font-weight: bold;
 }
 
 /* Status Button Container */
@@ -342,7 +337,6 @@ tr:hover {
   border-radius: 15px;
   border: none;
   color: black;
-  font-weight: bold;
   cursor: pointer;
   transition: transform 0.2s, opacity 0.2s;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);

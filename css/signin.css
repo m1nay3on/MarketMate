@@ -35,14 +35,12 @@ body, html {
   font-size: 20px;
   margin-bottom: 20px;
   letter-spacing: 2px;
-  font-weight: 100;
 }
 
 .modal h4 {
   font-size: 9px;
   margin-bottom: 20px;
   letter-spacing: 1px;
-  font-weight: 100;
   color: gray;
   white-space: nowrap;
 }
@@ -80,7 +78,6 @@ input {
   width: 150px;
   border: none;
   color: white;
-  font-weight: bold;
   padding: 12px;
   border-radius: 25px;
   margin: 15px auto 0;
