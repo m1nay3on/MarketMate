@@ -98,43 +98,18 @@
           <th>Status</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="customersTableBody">
         <tr>
-          <td>CUST213</td>
-          <td>Matthew Bote</td>
-          <td>rawr@gmail.com</td>
-          <td>Hawkins</td>
-          <td><span class="status delivered">Shipped</span></td>
-
-        </tr>
-        <tr>
-          <td>CUST213</td>
-          <td>JC Pogi</td>
-          <td>rawr@gmail.com</td>
-          <td>Hawkins</td>
-          <td><span class="status pending">Pending</span></td>
-        </tr>
-        <tr>
-          <td>CUST213</td>
-          <td>Isaiah</td>
-          <td>rawr@gmail.com</td>
-          <td>Hawkins</td>
-          <td><span class="status delivered">Shipped</span></td>
-        </tr>
-        <tr>
-          <td>CUST213</td>
-          <td>Sean</td>
-          <td>rawr@gmail.com</td>
-          <td>Hawkins</td>
-          <td><span class="status cancelled">Cancelled</span></td>
+          <td colspan="5" style="text-align: center;">Loading customers...</td>
         </tr>
       </tbody>
     </table>
   </div>
 </main>
 
-
- <script>
+<script src="../js/api.js"></script>
+<script src="../js/customers.js"></script>
+<script>
   const sidebar = document.getElementById("sidebar");
   const layout = document.getElementById("layout");
 
@@ -146,6 +121,11 @@
   function openSidebar() {
     sidebar.classList.remove("closed");
     layout.classList.remove("sidebar-closed");
+  }
+
+  function logout() {
+    TokenManager.removeToken();
+    window.location.href = 'Sign-In.html';
   }
 </script>
 

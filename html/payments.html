@@ -96,22 +96,22 @@
 
         <div class="stats-container">
           <div class="stat-card primary">
-            <div class="stat-dot" style="visibility: hidden;"></div> <div class="stat-value">66,761</div>
+            <div class="stat-dot" style="visibility: hidden;"></div> <div class="stat-value" id="totalRevenue">₱0</div>
             <div class="stat-label">Total Revenue (PHP)</div>
           </div>
           <div class="stat-card">
             <div class="stat-dot green"></div>
-            <div class="stat-value">670</div>
+            <div class="stat-value" id="totalTransactions">0</div>
             <div class="stat-label">Total Transactions</div>
           </div>
           <div class="stat-card">
             <div class="stat-dot yellow"></div>
-            <div class="stat-value">13</div>
+            <div class="stat-value" id="paidPayments">0</div>
             <div class="stat-label">Paid Payments</div>
           </div>
           <div class="stat-card">
             <div class="stat-dot red"></div>
-            <div class="stat-value">32</div>
+            <div class="stat-value" id="pendingPayments">0</div>
             <div class="stat-label">Pending Transactions</div>
           </div>
         </div>
@@ -128,26 +128,10 @@
                   <th>Status</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="paymentsTableBody">
                 <tr>
-                  <td>PAY10003</td>
-                  <td>OR9023</td>
-                  <td>Im Nayeon</td>
-                  <td>nayeonganda@gmail.com</td>
-                  <td>Debit Card</td>
-                  <td><span class="status-badge pending">Pending</span></td>
+                  <td colspan="6" style="text-align: center;">Loading payments...</td>
                 </tr>
-                <tr>
-                  <td>PAY10003</td>
-                  <td>OR9023</td>
-                  <td>Im Nayeon</td>
-                  <td>nayeonganda@gmail.com</td>
-                  <td>Debit Card</td>
-                  <td><span class="status-badge paid">Paid</span></td>
-                </tr>
-                <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>
-                <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>
-                <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>
               </tbody>
             </table>
           </div>
@@ -186,57 +170,14 @@
     layout.classList.remove("sidebar-closed");
   }
 
-
-    let currentPaymentSpan = null;
-    let selectedStatusText = "";
-    let selectedStatusClass = "";
-
-    // 1. Make status badges clickable
-    document.querySelectorAll('.status-badge').forEach(span => {
-      span.style.cursor = "pointer";
-      span.addEventListener('click', function() {
-        openPaymentModal(this);
-      });
-    });
-
-    function openPaymentModal(element) {
-      currentPaymentSpan = element;
-      
-      // Get PaymentID from the first cell of the row
-      const row = element.closest('tr');
-      const paymentId = row.cells[0].innerText;
-      
-      document.getElementById('displayPaymentId').innerText = paymentId;
-      document.getElementById('paymentModal').style.display = 'flex';
-    }
-
-    function closePaymentModal() {
-      document.getElementById('paymentModal').style.display = 'none';
-      document.querySelectorAll('.btn-opt').forEach(b => b.classList.remove('selected'));
-    }
-
-    function selectPaymentStatus(text, className) {
-      selectedStatusText = text;
-      selectedStatusClass = className;
-      
-      document.querySelectorAll('.btn-opt').forEach(b => b.classList.remove('selected'));
-      event.target.classList.add('selected');
-    }
-
-    // 2. Confirm the update
-    document.getElementById('confirmPaymentBtn').addEventListener('click', () => {
-      if (currentPaymentSpan && selectedStatusText !== "") {
-        currentPaymentSpan.innerText = selectedStatusText;
-        // Updates class to status-badge paid or status-badge pending
-        currentPaymentSpan.className = 'status-badge ' + selectedStatusClass;
-        
-        closePaymentModal();
-      } else {
-        alert("Please select a status first!");
-      }
-    });
+  function logout() {
+    TokenManager.removeToken();
+    window.location.href = 'Sign-In.html';
+  }
 </script>
 
+<script src="../js/api.js"></script>
+<script src="../js/payments.js"></script>
 
 </body>
 </html>

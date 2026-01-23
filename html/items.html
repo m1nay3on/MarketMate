@@ -243,6 +243,21 @@
     </div>
   </div>
 
+  <!-- Reviews Modal -->
+  <div id="reviewsModal" class="modal">
+    <div class="modal-content reviews-modal">
+      <span class="close-modal" onclick="closeReviewsModal()">&times;</span>
+      <h2 id="reviewsModalTitle">Reviews for Item</h2>
+      <div class="reviews-summary">
+        <span class="avg-rating" id="itemAvgRating">★ 0.0</span>
+        <span class="review-count" id="itemReviewCount">0 reviews</span>
+      </div>
+      <div class="reviews-list" id="reviewsList">
+        <p class="no-reviews">Loading reviews...</p>
+      </div>
+    </div>
+  </div>
+
 
 
   
@@ -262,103 +277,14 @@
     layout.classList.remove("sidebar-closed");
   }
 
-  const itemModal = document.getElementById("addItemModal");
-  const addBtn = document.querySelector(".add-item-btn");
-
-  // Open/Close
-  addBtn.onclick = () => itemModal.style.display = "flex";
-  function closeItemModal() { itemModal.style.display = "none"; }
-
-  function createNewItem() {
-    const name = document.getElementById("itemName").value;
-    const price = document.getElementById("itemPrice").value;
-    
-    if (name && price) {
-      const grid = document.querySelector(".items-grid");
-      const newCard = document.createElement("div");
-      newCard.className = "item-card";
-      
-      newCard.innerHTML = `
-        <button class="delete-btn">×</button>
-        <div class="image-placeholder">
-          <img src="../images/iphonee.jpg" alt="${name}">
-        </div>
-        <div class="item-info">
-          <h3>${name}</h3>
-          <p class="rating"><span class="star">★</span> 0.0 / 5.0</p>
-          <div class="card-actions">
-            <button class="btn-edit">Edit</button>
-            <button class="btn-reviews">View Reviews</button>
-          </div>
-        </div>
-      `;
-      
-      grid.appendChild(newCard);
-      closeItemModal();
-      
-      // Clear inputs
-      document.querySelectorAll(".modal input, .modal textarea").forEach(i => i.value = "");
-    } else {
-      alert("Please fill in the Name and Price!");
-    }
+  function logout() {
+    TokenManager.removeToken();
+    window.location.href = 'Sign-In.html';
   }
-
-    // Close if clicking background
-    window.onclick = (event) => {
-      if (event.target == itemModal) closeItemModal();
-    }
-
-    let currentEditCard = null; // Variable to keep track of which card we are editing
-
-  const editModal = document.getElementById("editItemModal");
-
-  // 1. Setup Click Listeners for all Edit buttons
-  // We use a "delegated" listener so it works even for items you just added
-  document.addEventListener('click', function (e) {
-    if (e.target && e.target.classList.contains('btn-edit')) {
-      openEditModal(e.target.closest('.item-card'));
-    }
-  });
-
-  function openEditModal(card) {
-    currentEditCard = card;
-    
-    // Extract current data from the card
-    const currentName = card.querySelector('h3').innerText;
-    // Assuming you might want to store the ID/Desc in data attributes or hidden fields 
-    // For now, we'll fill what we can see
-    document.getElementById("editItemName").value = currentName;
-    document.getElementById("editItemPrice").value = "78,000"; // Placeholder or pull from card if added
-    document.getElementById("editItemDesc").value = "Experience flagship power with the iPhone 17 Pro Max...";
-
-    editModal.style.display = "flex";
-  }
-
-  function closeEditModal() {
-    editModal.style.display = "none";
-    currentEditCard = null;
-  }
-
-  // 2. Handle the "Save Changes" Button
-  document.getElementById("saveChangesBtn").onclick = function() {
-    if (currentEditCard) {
-      const newName = document.getElementById("editItemName").value;
-      
-      // Update the card in the grid
-      currentEditCard.querySelector('h3').innerText = newName;
-      
-      // You can add logic here to update price, image, etc.
-      
-      closeEditModal();
-    }
-  };
-
-  // Close modal if clicking outside the content
-  window.addEventListener('click', (event) => {
-    if (event.target == editModal) closeEditModal();
-  });
 </script>
 
+<script src="../js/api.js"></script>
+<script src="../js/items.js"></script>
 
 </body>
 </html>

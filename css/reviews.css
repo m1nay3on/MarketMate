@@ -345,6 +345,12 @@ tr:hover {
   font-weight: bold;
 }
 
+.review-count {
+  font-size: 14px;
+  color: #666;
+  margin-top: 5px;
+}
+
 .star {
   color: #f1c40f;
 }

@@ -61,7 +61,7 @@
         </li>
 
         <li class="logout">
-          <a href="Sign-In.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+          <a href="#" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
         </li>
       </ul>
     </aside>
@@ -90,7 +90,7 @@
     <main class="main-content">
       <!-- Header -->
       <div class="page-header">
-        <h1>ShopName’s Dashboard</h1>
+        <h1 id="shopTitle">Dashboard</h1>
         <p>View your shop’s progress report and activity</p>
       </div>
 
@@ -98,76 +98,65 @@
       <section class="stats">
         <div class="stat-card dark">
           <span>Total Orders</span>
-          <h2>66,761</h2>
+          <h2 id="totalOrders">0</h2>
         </div>
 
         <div class="stat-card">
           <span><i class="dot green"></i> Active Orders</span>
-          <h2>670</h2>
+          <h2 id="activeOrders">0</h2>
         </div>
 
         <div class="stat-card">
           <span><i class="dot yellow"></i> To Ship</span>
-          <h2>13</h2>
+          <h2 id="toShip">0</h2>
         </div>
 
         <div class="stat-card">
-          <span><i class="dot red"></i> LoremIpsum</span>
-          <h2>32</h2>
+          <span><i class="dot blue"></i> Total Revenue</span>
+          <h2 id="totalRevenue">₱0</h2>
         </div>
       </section>
 
       <!-- Dashboard Grid -->
       <section class="dashboard-grid">
         <div class="card sales-card">
-          <h3>⭐ Sales Report</h3>
+          <h3>📊 Summary</h3>
           <div class="sales-content">
-            <div class="months">
-              <div class="circle">10K<br><small>Oct</small></div>
-              <div class="circle active">95K<br><small>Nov</small></div>
-              <div class="circle">15K<br><small>Dec</small></div>
-            </div>
-            <div class="total-sales">
-              <h2>120K</h2>
-              <span>Total Sales</span>
+            <div class="summary-grid">
+              <div class="summary-item">
+                <span class="summary-value" id="totalCustomers">0</span>
+                <span class="summary-label">Customers</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-value" id="totalItems">0</span>
+                <span class="summary-label">Items</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-value" id="totalPayments">0</span>
+                <span class="summary-label">Payments</span>
+              </div>
             </div>
           </div>
         </div>
 
         <div class="card full">
           <h3>⭐ Top Selling Items</h3>
-          <div class="bars-chart">
-            <div class="bar-item" style="height:70%"></div>
-            <div class="bar-item" style="height:45%"></div>
-            <div class="bar-item" style="height:85%"></div>
-            <div class="bar-item" style="height:20%"></div>
-            <div class="bar-item" style="height:15%"></div>
+          <div id="topItemsList" class="top-items-list">
+            <p class="no-data">Loading...</p>
           </div>
         </div>
 
         <div class="card feedback-card">
           <h3>❤️ Recent Customer Feedback</h3>
           <div class="rating">
-            <div class="score">4.8<sub>/5</sub></div>
-            <div class="bars">
-              <div class="bar-container"><div class="bar green" style="width: 90%"></div></div>
-              <div class="bar-container"><div class="bar yellow" style="width: 80%"></div></div>
-              <div class="bar-container"><div class="bar orange" style="width: 40%"></div></div>
-              <div class="bar-container"><div class="bar red" style="width: 20%"></div></div>
-            </div>
+            <div class="score" id="avgRating">0<sub>/5</sub></div>
+            <span class="rating-label">Average Rating</span>
           </div>
 
-          <div class="review">
-            <strong>Product: iPhone 13 Pro Max</strong>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          </div>
-          <div class="review">
-            <strong>Product: iPhone 13 Pro Max</strong>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          </div>
-          <div class="review">
-            <strong>Product: iPhone 13 Pro Max</strong>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <div id="recentReviews">
+            <div class="review">
+              <strong>Loading...</strong>
+            </div>
           </div>
         </div>
       </section>
@@ -175,8 +164,8 @@
     </div>
   </div>
 
-
- <script>
+  <script src="../js/api.js"></script>
+  <script>
   const sidebar = document.getElementById("sidebar");
   const layout = document.getElementById("layout");
 
@@ -189,6 +178,121 @@
     sidebar.classList.remove("closed");
     layout.classList.remove("sidebar-closed");
   }
+
+  function logout() {
+    TokenManager.removeToken();
+    window.location.href = 'Sign-In.html';
+  }
+
+  // Load dashboard data
+  async function loadDashboard() {
+    // Check if user is authenticated
+    if (!TokenManager.isAuthenticated()) {
+      window.location.href = 'Sign-In.html';
+      return;
+    }
+
+    try {
+      // Load user info
+      const user = await API.getCurrentUser();
+      const shopTitle = document.getElementById('shopTitle');
+      if (shopTitle) {
+        shopTitle.textContent = `${user.shop_name || user.username}'s Dashboard`;
+      }
+      
+      // Load stats
+      const stats = await API.getDashboardStats();
+      updateElement('totalOrders', stats.total_orders.toLocaleString());
+      updateElement('activeOrders', stats.active_orders.toLocaleString());
+      updateElement('toShip', stats.to_ship.toLocaleString());
+      updateElement('totalRevenue', '₱' + Number(stats.total_revenue).toLocaleString());
+      updateElement('totalCustomers', stats.total_customers.toLocaleString());
+      updateElement('totalItems', stats.total_items.toLocaleString());
+      updateElement('totalPayments', stats.total_orders.toLocaleString());
+      
+      // Load top items
+      await loadTopItems();
+      
+      // Load recent reviews
+      await loadRecentReviews();
+      
+    } catch (error) {
+      console.error('Error loading dashboard:', error);
+    }
+  }
+
+  function updateElement(id, value) {
+    const element = document.getElementById(id);
+    if (element) {
+      element.textContent = value;
+    }
+  }
+
+  async function loadTopItems() {
+    try {
+      const items = await API.getTopItems();
+      const container = document.getElementById('topItemsList');
+      
+      if (!container) return;
+      
+      if (items.length === 0) {
+        container.innerHTML = '<p class="no-data">No items sold yet</p>';
+        return;
+      }
+      
+      container.innerHTML = items.map((item, index) => `
+        <div class="top-item">
+          <span class="rank">#${index + 1}</span>
+          <span class="item-name">${item.name}</span>
+          <span class="item-count">${item.count} orders</span>
+        </div>
+      `).join('');
+      
+    } catch (error) {
+      console.error('Error loading top items:', error);
+      document.getElementById('topItemsList').innerHTML = '<p class="no-data">Failed to load</p>';
+    }
+  }
+
+  async function loadRecentReviews() {
+    try {
+      const reviews = await API.getRecentReviews();
+      const container = document.getElementById('recentReviews');
+      
+      if (!container) return;
+      
+      if (reviews.length === 0) {
+        container.innerHTML = '<div class="review"><p class="no-data">No reviews yet</p></div>';
+        // Update average rating to 0
+        updateElement('avgRating', '0');
+        return;
+      }
+      
+      // Calculate average rating
+      const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+      const avgElement = document.getElementById('avgRating');
+      if (avgElement) {
+        avgElement.innerHTML = `${avgRating.toFixed(1)}<sub>/5</sub>`;
+      }
+      
+      container.innerHTML = reviews.map(review => `
+        <div class="review">
+          <div class="review-header">
+            <strong>${review.item_name}</strong>
+            <span class="review-rating">${'★'.repeat(Math.round(review.rating))}</span>
+          </div>
+          <p class="review-comment">${review.comment || 'No comment'}</p>
+          <span class="review-author">- ${review.customer_name}</span>
+        </div>
+      `).join('');
+      
+    } catch (error) {
+      console.error('Error loading reviews:', error);
+      document.getElementById('recentReviews').innerHTML = '<div class="review"><p class="no-data">Failed to load</p></div>';
+    }
+  }
+
+  loadDashboard();
 </script>
 
 

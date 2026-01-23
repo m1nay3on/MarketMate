@@ -102,30 +102,9 @@
           <th>Status</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="rewardsTableBody">
         <tr>
-          <td>REW-30001</td>
-          <td>Voucher</td>
-          <td>m1nay3on</td>
-          <td>-100</td>
-          <td>December 31, 2027</td>
-          <td><span class="status delivered">Valid</span></td>
-        </tr>
-        <tr>
-          <td>REW-30001</td>
-          <td>Voucher</td>
-          <td>-m1nay3on</td>
-          <td>-100</td>
-          <td>December 31, 2027</td>
-          <td><span class="status cancelled">Expired</span></td>
-        </tr>
-        <tr>
-          <td>REW-30001</td>
-          <td>Voucher</td>
-          <td>-m1nay3on</td>
-          <td>-100</td>
-          <td>December 31, 2027</td>
-          <td><span class="status delivered">Valid</span></td>
+          <td colspan="6" style="text-align: center;">Loading rewards...</td>
         </tr>
       </tbody>
     </table>
@@ -234,8 +213,15 @@
         closeRewardModal();
       }
     }
+
+    function logout() {
+      TokenManager.removeToken();
+      window.location.href = 'Sign-In.html';
+    }
 </script>
 
+<script src="../js/api.js"></script>
+<script src="../js/rewards.js"></script>
 
 </body>
 </html>

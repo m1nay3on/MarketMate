@@ -92,71 +92,17 @@
     <div class="card-grid">
       <div class="product-sidebar">
         <div class="product-image-container">
-          <img src="iphonee.jpg" alt="iPhone 17 Pro Max" class="product-image">
+          <img src="../images/iphonee.jpg" alt="Product" class="product-image" id="productImage">
         </div>
-        <h2 class="product-title">Apple iPhone 17<br>Pro Max</h2>
+        <h2 class="product-title" id="productTitle">All Reviews</h2>
         <div class="main-rating">
-          <span class="star">★</span> 4.9 / 5.0
+          <span class="star">★</span> <span id="avgRating">0.0</span> / 5.0
         </div>
+        <p class="review-count" id="reviewCount">0 reviews</p>
       </div>
 
-      <div class="reviews-container">
-        <div class="review-box">
-          <div class="review-user">
-            <img src="ppft.png" alt="User" class="user-avatar">
-            <div class="user-info">
-              <span class="username">m1nayeon</span>
-              <span class="user-rating">★ 4.8 / 5.0</span>
-            </div>
-          </div>
-          <p class="review-meta">Product : iPhone 13 Pro Max</p>
-          <p class="review-text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-        </div>
-
-        <div class="review-box">
-          <div class="review-user">
-            <img src="ppft.png" alt="User" class="user-avatar">
-            <div class="user-info">
-              <span class="username">m1nayeon</span>
-              <span class="user-rating">★ 4.8 / 5.0</span>
-            </div>
-          </div>
-          <p class="review-meta">Product : iPhone 13 Pro Max</p>
-          <p class="review-text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-        </div>
-
-         <div class="review-box">
-          <div class="review-user">
-            <img src="ppft.png" alt="User" class="user-avatar">
-            <div class="user-info">
-              <span class="username">m1nayeon</span>
-              <span class="user-rating">★ 4.8 / 5.0</span>
-            </div>
-          </div>
-          <p class="review-meta">Product : iPhone 13 Pro Max</p>
-          <p class="review-text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-        </div>
-
-         <div class="review-box">
-          <div class="review-user">
-            <img src="ppft.png" alt="User" class="user-avatar">
-            <div class="user-info">
-              <span class="username">m1nayeon</span>
-              <span class="user-rating">★ 4.8 / 5.0</span>
-            </div>
-          </div>
-          <p class="review-meta">Product : iPhone 13 Pro Max</p>
-          <p class="review-text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-        </div>
-        
+      <div class="reviews-container" id="reviewsContainer">
+        <p style="text-align: center; color: #aaa;">Loading reviews...</p>
         </div>
     </div>
   </div>
@@ -178,8 +124,15 @@
     sidebar.classList.remove("closed");
     layout.classList.remove("sidebar-closed");
   }
+
+  function logout() {
+    TokenManager.removeToken();
+    window.location.href = 'Sign-In.html';
+  }
 </script>
 
+<script src="../js/api.js"></script>
+<script src="../js/reviews.js"></script>
 
 </body>
 </html>

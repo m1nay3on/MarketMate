@@ -99,39 +99,9 @@
           <th>Status</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="ordersTableBody">
         <tr>
-          <td>#1001</td>
-          <td>Juan Dela Cruz</td>
-          <td>ITEM-992</td>
-          <td>Manila, PH</td>
-          <td>GCash</td>
-          <td><span class="status shipped">Shipped</span></td>
-
-        </tr>
-        <tr>
-          <td>#1002</td>
-          <td>Maria Clara</td>
-          <td>ITEM-451</td>
-          <td>Quezon City, PH</td>
-          <td>COD</td>
-          <td><span class="status pending">Pending</span></td>
-        </tr>
-        <tr>
-          <td>#1003</td>
-          <td>Jose Rizal</td>
-          <td>ITEM-102</td>
-          <td>Calamba, PH</td>
-          <td>Card</td>
-          <td><span class="status shipped">Shipped</span></td>
-        </tr>
-        <tr>
-          <td>#1004</td>
-          <td>Sisa Santos</td>
-          <td>ITEM-005</td>
-          <td>Bulacan, PH</td>
-          <td>GCash</td>
-          <td><span class="status cancelled">Cancelled</span></td>
+          <td colspan="6" style="text-align: center;">Loading orders...</td>
         </tr>
       </tbody>
     </table>
@@ -154,8 +124,8 @@
   </div>
 </div>
 
-
- <script>
+<script src="../js/api.js"></script>
+<script>
   const sidebar = document.getElementById("sidebar");
   const layout = document.getElementById("layout");
 
@@ -169,22 +139,57 @@
     layout.classList.remove("sidebar-closed");
   }
 
-  let currentTargetSpan = null; // Keeps track of which row we are editing
+  function logout() {
+    TokenManager.removeToken();
+    window.location.href = 'Sign-In.html';
+  }
+
+  let currentTargetSpan = null;
+  let currentOrderId = null;
   let selectedStatusText = "";
   let selectedStatusClass = "";
 
-  // 1. Attach click events to all status badges
-  document.querySelectorAll('.status').forEach(span => {
-    span.style.cursor = "pointer"; // Make it look clickable
-    span.addEventListener('click', function() {
-      openModal(this);
-    });
-  });
+  // Load orders from API
+  async function loadOrders() {
+    try {
+      const orders = await API.getOrders();
+      const tbody = document.getElementById('ordersTableBody');
+      tbody.innerHTML = '';
+      
+      if (orders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No orders found</td></tr>';
+        return;
+      }
+      
+      orders.forEach(order => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+          <td>${order.order_id}</td>
+          <td>${order.customer_name}</td>
+          <td>${order.item_name}</td>
+          <td>${order.customer_address}</td>
+          <td>${order.payment_method}</td>
+          <td><span class="status ${order.status}" data-id="${order.id}">${order.status}</span></td>
+        `;
+      });
+      
+      // Attach click events to status badges
+      document.querySelectorAll('.status').forEach(span => {
+        span.style.cursor = "pointer";
+        span.addEventListener('click', function() {
+          openModal(this);
+        });
+      });
+    } catch (error) {
+      console.error('Error loading orders:', error);
+      alert('Failed to load orders');
+    }
+  }
 
   function openModal(element) {
     currentTargetSpan = element;
+    currentOrderId = element.getAttribute('data-id');
     
-    // Get Order ID from the first column of the current row
     const row = element.closest('tr');
     const orderId = row.cells[0].innerText;
     
@@ -194,7 +199,6 @@
 
   function closeModal() {
     document.getElementById('statusModal').style.display = 'none';
-    // Reset selection
     document.querySelectorAll('.btn-opt').forEach(b => b.classList.remove('selected'));
   }
 
@@ -202,33 +206,35 @@
     selectedStatusText = text;
     selectedStatusClass = className;
     
-    // Visual feedback for selection
     document.querySelectorAll('.btn-opt').forEach(b => b.classList.remove('selected'));
     event.target.classList.add('selected');
   }
 
-  // 2. Handle Confirm Click
-  document.getElementById('confirmBtn').addEventListener('click', () => {
-    if (currentTargetSpan && selectedStatusText !== "") {
-      // Update the text
-      currentTargetSpan.innerText = selectedStatusText;
-      
-      // Update the class (remove old status classes, add new one)
-      currentTargetSpan.className = 'status ' + selectedStatusClass;
-      
-      closeModal();
+  document.getElementById('confirmBtn').addEventListener('click', async () => {
+    if (currentTargetSpan && selectedStatusText !== "" && currentOrderId) {
+      try {
+        await API.updateOrder(currentOrderId, { status: selectedStatusClass });
+        
+        currentTargetSpan.innerText = selectedStatusText;
+        currentTargetSpan.className = 'status ' + selectedStatusClass;
+        
+        closeModal();
+      } catch (error) {
+        alert('Failed to update order status: ' + error.message);
+      }
     } else {
       alert("Please select a status first!");
     }
   });
 
-  // Close modal if clicking outside the box
   window.onclick = function(event) {
     const modal = document.getElementById('statusModal');
     if (event.target == modal) {
       closeModal();
     }
   }
+
+  loadOrders();
 </script>
 
 
