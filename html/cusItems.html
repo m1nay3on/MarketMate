@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarketMate Items</title>
+  <link rel="stylesheet" href="../css/cusItems.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aoboshi+One&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome for search icon -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+</head>
+<body>
+ <div class="layout" id="layout">
+
+<aside class="sidebar" id="sidebar">
+  <button class="close-btn" onclick="closeSidebar()">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <ul class="menu">
+    <li>
+      <a href="cusItems.html">
+        <i class="fa-solid fa-desktop"></i> Items
+      </a>
+    </li>
+    <li>
+      <a href="status-pay.html">
+        <i class="fa-solid fa-box-open"></i> Status
+      </a>
+    </li>
+
+    <li class="section-label">Account</li>
+
+    <li>
+      <a href="home.html">
+        <i></i> Home
+      </a>
+    </li>
+
+    <li class="logout">
+      <a href="Sign-In.html">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </li>
+  </ul>
+</aside>
+
+  <div class="content-wrapper">
+  <nav class="navbar">
+ <button class="open-btn" onclick="openSidebar()">
+  <i class="fa-solid fa-bars"></i>
+</button>
+
+  <img src="../images/MarketMate.png" class="logo" />
+
+  <div class="search-container">
+    <i class="fa fa-search"></i>
+    <input type="text" placeholder="Search" />
+  </div>
+
+  <div class="profile">
+    <img src="../images/ppft.png" />
+  </div>
+</nav>
+  
+<main class="main-content">
+  <div class="header-flex">
+    <h1>Items</h1>
+    <button class="cart-btn-main"><i class="fa-solid fa-cart-shopping"></i></button>
+  </div>
+
+  <div class="items-grid">
+    <div class="item-card">
+      <div class="image-placeholder">
+        <img src="../images/iphonee.jpg" alt="iPhone 17 Pro Max">
+      </div>
+      <div class="item-info">
+        <h3>Apple iPhone 17 Pro Max</h3>
+        <p class="rating"><span class="star">★</span> 4.9 / 5.0</p>
+        <p class="price">₱ 78,000</p>
+        
+        <div class="customer-actions">
+          <button class="btn-buy-now">Buy Now</button>
+          <button class="btn-add-cart"><i class="fa-solid fa-cart-plus"></i></button>
+        </div>
+      </div>
+    </div>
+
+     <div class="item-card">
+      <div class="image-placeholder">
+        <img src="../images/iphonee.jpg" alt="iPhone 17 Pro Max">
+      </div>
+      <div class="item-info">
+        <h3>Apple iPhone 17 Pro Max</h3>
+        <p class="rating"><span class="star">★</span> 4.9 / 5.0</p>
+        <p class="price">₱ 78,000</p>
+        
+        <div class="customer-actions">
+          <button class="btn-buy-now">Buy Now</button>
+          <button class="btn-add-cart"><i class="fa-solid fa-cart-plus"></i></button>
+        </div>
+      </div>
+    </div>
+
+     <div class="item-card">
+      <div class="image-placeholder">
+        <img src="../images/iphonee.jpg" alt="iPhone 17 Pro Max">
+      </div>
+      <div class="item-info">
+        <h3>Apple iPhone 17 Pro Max</h3>
+        <p class="rating"><span class="star">★</span> 4.9 / 5.0</p>
+        <p class="price">₱ 78,000</p>
+        
+        <div class="customer-actions">
+          <button class="btn-buy-now">Buy Now</button>
+          <button class="btn-add-cart"><i class="fa-solid fa-cart-plus"></i></button>
+        </div>
+      </div>
+    </div>
+
+     <div class="item-card">
+      <div class="image-placeholder">
+        <img src="../images/iphonee.jpg" alt="iPhone 17 Pro Max">
+      </div>
+      <div class="item-info">
+        <h3>Apple iPhone 17 Pro Max</h3>
+        <p class="rating"><span class="star">★</span> 4.9 / 5.0</p>
+        <p class="price">₱ 78,000</p>
+        
+        <div class="customer-actions">
+          <button class="btn-buy-now">Buy Now</button>
+          <button class="btn-add-cart"><i class="fa-solid fa-cart-plus"></i></button>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    
+</main>
+
+  <div id="addItemModal" class="modal">
+    <div class="modal-content item-modal">
+      <span class="close-modal" onclick="closeItemModal()">&times;</span>
+      <div class="modal-flex">
+        <div class="modal-form">
+          <h2>Add Item</h2>
+          <div class="form-group">
+            <label>Item ID*</label>
+            <input type="text" id="itemId" placeholder="ITM5264">
+          </div>
+          <div class="form-group">
+            <label>Item Name*</label>
+            <input type="text" id="itemName" placeholder="iPhone 17 Pro Max">
+          </div>
+          <div class="form-group">
+            <label>Description*</label>
+            <textarea id="itemDesc" placeholder="Experience flagship power..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Price*</label>
+            <input type="text" id="itemPrice" placeholder="78,000">
+          </div>
+          <div class="form-group">
+            <label>Variants</label>
+            <div class="variant-input">
+              <input type="text" id="itemVariant" placeholder="Cosmic Orange">
+              <button class="add-variant-btn"><i class="fa-solid fa-plus"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-image-section">
+          <div class="image-preview-box">
+            <img id="previewImg" src="../images/iphonee.jpg" alt="Preview">
+          </div>
+          <p>Item Image</p>
+          <div class="image-actions">
+            <button class="btn-upload">Upload</button>
+            <button class="btn-delete-img">Delete</button>
+          </div>
+          <button class="btn-submit-item" onclick="createNewItem()">Add Item</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="editItemModal" class="modal">
+    <div class="modal-content item-modal">
+      <span class="close-modal" onclick="closeEditModal()">&times;</span>
+      <div class="modal-flex">
+        <div class="modal-form">
+          <h2>Edit Item</h2>
+          <div class="form-group">
+            <label>Item ID*</label>
+            <input type="text" id="editItemId">
+          </div>
+          <div class="form-group">
+            <label>Item Name*</label>
+            <input type="text" id="editItemName">
+          </div>
+          <div class="form-group">
+            <label>Description*</label>
+            <textarea id="editItemDesc"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Price*</label>
+            <input type="text" id="editItemPrice">
+          </div>
+          <div class="form-group">
+            <label>Variants</label>
+            <div class="variant-input">
+              <input type="text" id="editItemVariant" placeholder="Cosmic Orange">
+              <button class="add-variant-btn"><i class="fa-solid fa-plus"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-image-section">
+          <div class="image-preview-box">
+            <img id="editPreviewImg" src="../images/iphonee.jpg" alt="Preview">
+          </div>
+          <p>Item Image</p>
+          <div class="image-actions">
+            <button class="btn-upload">Upload</button>
+            <button class="btn-delete-img">Delete</button>
+          </div>
+          <button class="btn-submit-item" id="saveChangesBtn">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  
+
+
+ <script>
+  const sidebar = document.getElementById("sidebar");
+  const layout = document.getElementById("layout");
+
+  function closeSidebar() {
+    sidebar.classList.add("closed");
+    layout.classList.add("sidebar-closed");
+  }
+
+  function openSidebar() {
+    sidebar.classList.remove("closed");
+    layout.classList.remove("sidebar-closed");
+  }
+
+  const itemModal = document.getElementById("addItemModal");
+  const addBtn = document.querySelector(".add-item-btn");
+
+  // Open/Close
+  addBtn.onclick = () => itemModal.style.display = "flex";
+  function closeItemModal() { itemModal.style.display = "none"; }
+
+  function createNewItem() {
+    const name = document.getElementById("itemName").value;
+    const price = document.getElementById("itemPrice").value;
+    
+    if (name && price) {
+      const grid = document.querySelector(".items-grid");
+      const newCard = document.createElement("div");
+      newCard.className = "item-card";
+      
+      newCard.innerHTML = `
+        <button class="delete-btn">×</button>
+        <div class="image-placeholder">
+          <img src="../images/iphonee.jpg" alt="${name}">
+        </div>
+        <div class="item-info">
+          <h3>${name}</h3>
+          <p class="rating"><span class="star">★</span> 0.0 / 5.0</p>
+          <div class="card-actions">
+            <button class="btn-edit">Edit</button>
+            <button class="btn-reviews">View Reviews</button>
+          </div>
+        </div>
+      `;
+      
+      grid.appendChild(newCard);
+      closeItemModal();
+      
+      // Clear inputs
+      document.querySelectorAll(".modal input, .modal textarea").forEach(i => i.value = "");
+    } else {
+      alert("Please fill in the Name and Price!");
+    }
+  }
+
+    // Close if clicking background
+    window.onclick = (event) => {
+      if (event.target == itemModal) closeItemModal();
+    }
+
+    let currentEditCard = null; // Variable to keep track of which card we are editing
+
+  const editModal = document.getElementById("editItemModal");
+
+  // 1. Setup Click Listeners for all Edit buttons
+  // We use a "delegated" listener so it works even for items you just added
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.classList.contains('btn-edit')) {
+      openEditModal(e.target.closest('.item-card'));
+    }
+  });
+
+  function openEditModal(card) {
+    currentEditCard = card;
+    
+    // Extract current data from the card
+    const currentName = card.querySelector('h3').innerText;
+    // Assuming you might want to store the ID/Desc in data attributes or hidden fields 
+    // For now, we'll fill what we can see
+    document.getElementById("editItemName").value = currentName;
+    document.getElementById("editItemPrice").value = "78,000"; // Placeholder or pull from card if added
+    document.getElementById("editItemDesc").value = "Experience flagship power with the iPhone 17 Pro Max...";
+
+    editModal.style.display = "flex";
+  }
+
+  function closeEditModal() {
+    editModal.style.display = "none";
+    currentEditCard = null;
+  }
+
+  // 2. Handle the "Save Changes" Button
+  document.getElementById("saveChangesBtn").onclick = function() {
+    if (currentEditCard) {
+      const newName = document.getElementById("editItemName").value;
+      
+      // Update the card in the grid
+      currentEditCard.querySelector('h3').innerText = newName;
+      
+      // You can add logic here to update price, image, etc.
+      
+      closeEditModal();
+    }
+  };
+
+  // Close modal if clicking outside the content
+  window.addEventListener('click', (event) => {
+    if (event.target == editModal) closeEditModal();
+  });
+</script>
+
+
+</body>
+</html>
