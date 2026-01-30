@@ -317,8 +317,8 @@ td {
   text-align: center;
 }
 
-.status-badge.pending { background: #ff9f43; }
-.status-badge.paid { background: #00ff00; color: #000; font-weight: bold; }
+.status-badge.pending { background: #FF9800; color: white; }
+.status-badge.paid { background: #4CAF50; color: white; font-weight: bold; }
 
 
 /* Modal Overlay Base */

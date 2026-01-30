@@ -308,7 +308,8 @@ tr:hover {
   background-color: #d1d1d1;
   padding: 30px;
   border-radius: 20px;
-  width: 450px;
+  width: 520px;
+  max-width: 90%;
   text-align: center;
   position: relative;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
@@ -331,7 +332,9 @@ tr:hover {
 /* Status Button Container */
 .status-options {
   display: flex;
-  justify-content: space-around;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
   margin: 25px 0;
 }
 
@@ -349,15 +352,35 @@ tr:hover {
 .btn-opt:hover { opacity: 0.8; }
 .btn-opt.selected { transform: scale(1.1); border: 2px solid #333; }
 
-/* Specific Colors from Screenshot */
-.status.btn-new { background-color: #00ff22; }
-.btn-pending { background-color: #ffaa66; }
-.btn-cancelled { background-color: #ff0000; color: white; }
-/* This handles the label inside the table */
+/* Specific Colors - Smart color coding for order status */
+.btn-shipped { background-color: #2196F3; color: white; } /* Blue - In Transit */
+.btn-completed { background-color: #4CAF50; color: white; } /* Green - Done */
+.btn-pending { background-color: #FF9800; color: white; } /* Orange - Waiting */
+.btn-cancelled { background-color: #f44336; color: white; } /* Red - Cancelled */
 
-.status.new { 
-  background-color: #00ff22; 
-  color: black;
+.status.shipped { 
+  background-color: #e3f2fd; 
+  color: #1976D2;
+}
+
+.status.completed {
+  background-color: #e8f5e9;
+  color: #388E3C;
+}
+
+.status.paid {
+  background-color: #fff3e0;
+  color: #F57C00;
+}
+
+.status.pending {
+  background-color: #fce4ec;
+  color: #c2185b;
+}
+
+.status.new {
+  background-color: #e8eaf6;
+  color: #3f51b5;
 }
 
 .confirm-btn {
@@ -368,4 +391,53 @@ tr:hover {
   border: none;
   cursor: pointer;
   font-size: 16px;
+}
+
+/* Add Button */
+.add-btn {
+  background-color: #074a61;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-btn:hover {
+  background-color: #0a5d7a;
+}
+
+/* Add Order Modal */
+.add-modal {
+  max-width: 400px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.form-group select {
+  cursor: pointer;
 }

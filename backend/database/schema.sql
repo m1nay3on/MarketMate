@@ -4,12 +4,13 @@ DROP DATABASE IF EXISTS marketmate_db;
 CREATE DATABASE marketmate_db;
 USE marketmate_db;
 
--- Users table (for shop owners/admins)
+-- Users table (for shop owners/admins and customers)
 CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
+    role ENUM('admin', 'user') DEFAULT 'user',
     shop_name VARCHAR(100) DEFAULT 'My Shop',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -43,6 +44,7 @@ CREATE TABLE items (
     price DECIMAL(10, 2) NOT NULL,
     image_url VARCHAR(500),
     rating DECIMAL(2, 1) DEFAULT 0.0,
+    is_deleted TINYINT(1) DEFAULT 0,
     user_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

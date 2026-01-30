@@ -220,29 +220,30 @@ body {
 
 /* Header */
 .page-header h1 {
-  font-size: 28px;
-  margin-bottom: 6px;
+  font-size: 26px;
+  margin-bottom: 4px;
 }
 
 .page-header p {
   color: #555;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
+  font-size: 14px;
 }
 
 /* Stats */
 .stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  margin-bottom: 30px;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
 /* Fix the Stat Cards to have the little arrow icon style */
 .stat-card {
   position: relative;
   background: white;
-  padding: 25px;
-  border-radius: 25px; /* Softer corners like the design */
+  padding: 20px;
+  border-radius: 20px;
 }
 
 .stat-card.dark {
@@ -253,26 +254,26 @@ body {
 .stat-card::after {
   content: '↗';
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 12px;
+  right: 12px;
   background: #eee;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 11px;
   color: #333;
 }
 
 .stat-card span {
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .stat-card h2 {
-  font-size: 32px;
-  margin-top: 15px;
+  font-size: 28px;
+  margin-top: 10px;
 }
 
 /* Dots */
@@ -292,89 +293,135 @@ body {
 /* 1. Update the grid container */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr; 
-  grid-template-rows: auto 1fr; /* Top row fits content, bottom row takes rest */
-  gap: 24px;
-  align-items: stretch; 
+  grid-template-columns: 1.2fr 0.8fr; 
+  gap: 15px;
+  align-items: start; 
 }
 
-/* 2. Fix the Left-Hand cards */
-.sales-card {
-  grid-column: 1;
-  grid-row: 1;
-}
-
-.card.full {
-  grid-column: 1; /* Force it to stay on the left */
-  grid-row: 2;    /* Put it in the second row */
+/* Left column stacks cards vertically */
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 /* 3. Fix the Right-Hand Feedback card */
 .feedback-card {
-  grid-column: 2;   /* Put it in the second column */
-  grid-row: 1 / 3;  /* Make it span from top to bottom */
-  height: 100%;     /* Make it match the height of both left cards combined */
+  grid-column: 2;
+  grid-row: 1;
 }
 
 
 .card {
   background: white;
-  border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
 }
 
 .card h3 {
-  margin-bottom: 15px;
+  margin-bottom: 12px;
+  font-size: 15px;
 }
 
-/* Align the Sales Report Content better */
-/* Container for the whole section */
-/* Target only this card to keep it short */
+/* Compact Sales Report */
 .sales-card {
-  padding: 15px 25px !important; /* Reduced padding */
-  max-height: 180px; /* Forces the container to stay small */
+  padding: 15px 18px !important;
 }
 
 .sales-content {
   display: flex;
-  /* Change from space-between to flex-start to move everything left */
-  justify-content: flex-start; 
+  justify-content: space-between; 
   align-items: center;
   padding: 0;
-  margin-top: 5px;
   width: 100%;
 }
 
-.months {
+/* Quick Stats Row */
+.quick-stats-row {
   display: flex;
   gap: 12px;
 }
 
+.quick-stat {
+  flex: 1;
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+}
+
+.quick-stat i {
+  font-size: 22px;
+  color: #003e59;
+  width: 35px;
+  height: 35px;
+  background: #e8f4f8;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quick-stat div {
+  display: flex;
+  flex-direction: column;
+}
+
+.quick-stat .quick-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #003e59;
+}
+
+.quick-stat small {
+  font-size: 11px;
+  color: #666;
+}
+
+/* Chart Card */
+.chart-card {
+  padding: 15px 18px !important;
+}
+
+.months {
+  display: flex;
+  gap: 10px;
+}
+
 .circle {
-  width: 58px; /* Shrunk from 70px */
-  height: 58px; /* Shrunk from 70px */
-  border: 2px solid #003e59;
+  width: 55px;
+  height: 55px;
+  border: 3px solid #003e59;
   border-radius: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
   font-weight: bold;
+  background: white;
+}
+
+.circle span {
+  font-size: 13px;
+  color: #003e59;
 }
 
 .circle small {
   font-size: 9px;
   font-weight: normal;
+  color: #666;
 }
 
 /* This was the main culprit for the big container */
 .total-sales {
-  width: 90px;
-  height: 90px;
+  width: 80px;
+  height: 80px;
   background: #003e59;
   color: white;
   border-radius: 50%;
@@ -382,59 +429,67 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  
-  /* ADJUST THIS: Move closer or further by changing this number */
-  margin-left: 15px; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
 }
 
 .total-sales h2 {
-  font-size: 28px; /* Shrunk from 36px */
+  font-size: 18px;
   margin: 0;
 }
 
 .total-sales span {
-  font-size: 10px;
+  font-size: 9px;
+  opacity: 0.9;
 } 
 
 
 /* Feedback */
+.feedback-card {
+  max-height: none;
+  overflow: hidden;
+  padding: 15px 18px !important;
+}
+
 .rating {
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin: 20px 0;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .score {
-  width: 80px;
-  height: 80px;
-  font-size: 28px;
+  width: 60px;
+  height: 60px;
+  font-size: 20px;
   font-weight: bold;
   background: #003e59;
   color: white;
-  padding: 20px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.score sub {
+  font-size: 10px;
 }
 
 .bars {
-  flex: 1; /* This makes the bars take up all remaining width */
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 /* The grey track behind the colors */
 .bar-container {
   background-color: #eee;
-  width: 345px; /* Adjust width as needed */
-  height: 8px;
-  border-radius: 10px;
-  margin-bottom: 8px;
-  overflow: hidden; /* Keeps the colored bar inside the rounded corners */
+  flex: 1;
+  height: 7px;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 /* The colored filling */
@@ -607,3 +662,176 @@ body {
   background-color: #2aa8ff;
 }
 
+/* Rating Distribution Bars */
+.rating-bars {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rating-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rating-row span {
+  width: 10px;
+  font-weight: bold;
+  color: #333;
+  font-size: 10px;
+}
+
+.rating-row .bar-container {
+  flex: 1;
+  height: 7px;
+  background: #eee;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.rating-row .bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* Top Items Bar Chart */
+.top-items-chart {
+  padding: 5px 0;
+  width: 100%;
+}
+
+.bar-chart-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 160px;
+  padding: 10px 0;
+  width: 100%;
+}
+
+.bar-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.bar-value {
+  font-size: 11px;
+  font-weight: bold;
+  color: #003e59;
+  margin-bottom: 5px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.bar-fill {
+  width: 90%;
+  max-width: 100px;
+  background: linear-gradient(to top, #003e59, #1a6a8a);
+  border-radius: 6px 6px 0 0;
+  transition: height 0.4s ease-out;
+  min-height: 8px;
+}
+
+.bar-label {
+  font-size: 10px;
+  text-align: center;
+  color: #555;
+  margin-top: 6px;
+  word-break: break-word;
+  width: 100%;
+  max-width: 100px;
+  height: 26px;
+  line-height: 1.2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0 2px;
+}
+
+/* Review Cards */
+.reviews-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.reviews-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.reviews-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.reviews-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.review-card {
+  background: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.review-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.reviewer-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 16px;
+}
+
+.reviewer-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.reviewer-name {
+  font-weight: bold;
+  font-size: 12px;
+  color: #333;
+}
+
+.reviewer-rating {
+  font-size: 11px;
+  color: #f39c12;
+}
+
+.review-card-body {
+  font-size: 12px;
+}
+
+.review-product {
+  color: #333;
+  margin-bottom: 3px;
+}
+
+.review-text {
+  color: #666;
+  line-height: 1.4;
+  font-size: 11px;
+}

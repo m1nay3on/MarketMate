@@ -20,11 +20,11 @@ app = FastAPI(
     swagger_ui_cdn_url="https://unpkg.com/swagger-ui-dist@3",
 )
 
-# CORS middleware - Allow all origins for development
+# CORS middleware - allow configured dev origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
+    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )

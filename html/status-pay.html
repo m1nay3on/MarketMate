@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarketMate Order Status</title>
+  <link rel="stylesheet" href="../css/status-pay.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aoboshi+One&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome for search icon -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+</head>
+<body>
+ <div class="layout" id="layout">
+
+<aside class="sidebar" id="sidebar">
+  <button class="close-btn" onclick="closeSidebar()">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <ul class="menu">
+    <li>
+      <a href="cusItems.html">
+        <i class="fa-solid fa-desktop"></i> Items
+      </a>
+    </li>
+    <li>
+      <a href="status-pay.html">
+        <i class="fa-solid fa-box-open"></i> Status
+      </a>
+    </li>
+
+    <li class="section-label">Account</li>
+
+    <li>
+      <a href="cusItems.html">
+        <i class="fa-solid fa-house"></i> Home
+      </a>
+    </li>
+
+    <li class="logout">
+      <a href="#" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </li>
+  </ul>
+</aside>
+
+  <div class="content-wrapper">
+  <nav class="navbar">
+ <button class="open-btn" onclick="openSidebar()">
+  <i class="fa-solid fa-bars"></i>
+</button>
+
+  <img src="../images/MarketMate.png" class="logo" />
+
+  <div class="search-container">
+    <i class="fa fa-search"></i>
+    <input type="text" placeholder="Search" />
+  </div>
+
+  <div class="profile">
+    <img src="../images/ppft.png" />
+  </div>
+</nav>
+
+<div class="main-content">
+  <h1 class="page-title">Order Status</h1>
+
+  <div class="status-tabs">
+    <a href="status-pay.html" class="tab-btn active">To Pay</a>
+    <a href="status-ship.html" class="tab-btn">To Ship</a>
+    <a href="rcvd.html" class="tab-btn">To Receive</a>
+    <a href="cmpltd.html" class="tab-btn">Completed</a>
+  </div>
+
+  <div class="orders-container" id="ordersContainer">
+    <p style="text-align: center; color: #666;">Loading orders...</p>
+  </div>
+</div>
+  
+</div>
+</div>
+
+<script src="../js/api.js?v=5"></script>
+<script>
+  const sidebar = document.getElementById("sidebar");
+  const layout = document.getElementById("layout");
+
+  function closeSidebar() {
+    sidebar.classList.add("closed");
+    layout.classList.add("sidebar-closed");
+  }
+
+  function openSidebar() {
+    sidebar.classList.remove("closed");
+    layout.classList.remove("sidebar-closed");
+  }
+
+  function logout() {
+    TokenManager.removeToken();
+    window.location.href = 'Sign-In.html';
+  }
+
+  // Cancel/delete a pending order
+  async function cancelOrder(orderId, orderRef) {
+    if (!confirm(`Are you sure you want to cancel order ${orderRef}?`)) {
+      return;
+    }
+    
+    try {
+      await API.cancelMyOrder(orderId);
+      showToast('Order cancelled successfully');
+      loadOrders(); // Refresh the list
+    } catch (error) {
+      console.error('Error cancelling order:', error);
+      showToast('Failed to cancel order: ' + error.message);
+    }
+  }
+
+  // Show toast message
+  function showToast(message) {
+    // Create toast if it doesn't exist
+    let toast = document.getElementById('toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'toast';
+      toast.className = 'toast';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  // Load pending payment orders
+  async function loadOrders() {
+    try {
+      console.log('📦 Loading orders...');
+      const orders = await API.getMyOrders();
+      console.log('📦 Received orders:', orders);
+      
+      // Debug: log all statuses
+      orders.forEach(o => console.log(`📦 Order ${o.order_id}: status="${o.status}" (type: ${typeof o.status})`));
+      
+      const container = document.getElementById('ordersContainer');
+      
+      // Filter for pending payment orders (exclude shipped, cancelled, completed)
+      const pendingOrders = orders.filter(order => {
+        const status = (order.status || '').toLowerCase();
+        return status === 'pending' || status === 'new';
+      });
+      console.log('📦 Pending orders:', pendingOrders);
+      
+      if (pendingOrders.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #666;">No pending orders</p>';
+        return;
+      }
+      
+      container.innerHTML = '';
+      
+      pendingOrders.forEach(order => {
+        const card = document.createElement('div');
+        card.className = 'order-card';
+        card.id = `order-${order.id}`;
+        
+        const price = order.total_amount ? `₱ ${Number(order.total_amount).toLocaleString()}` : '₱ 0';
+        const imageUrl = order.image_url ? `../${order.image_url}` : '../images/iphonee.jpg';
+        
+        card.innerHTML = `
+          <div class="order-body">
+            <div class="item-details">
+              <img src="${imageUrl}" alt="Item" class="order-item-img">
+              <div class="item-text">
+                <h3>${order.item_name || 'Product'}</h3>
+                <p class="variation">Order #${order.order_id}</p>
+                <p class="qty">x${order.quantity || 1}</p>
+                <span class="total-price">${price}</span>
+              </div>
+            </div>
+
+            <div class="order-ids-container">
+              <span class="order-id">Order ID : ${order.order_id}</span>
+              <span class="shipping-id">Status : ${order.status}</span>
+            </div>
+          </div>
+
+          <div class="order-footer">
+            <div class="total-section">
+              <span class="total-label">Order Total : </span>
+              <span class="total-price">${price}</span>
+              <button class="btn-cancel" data-id="${order.id}" data-ref="${order.order_id}" title="Cancel Order">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+              <button class="btn-pay" data-id="${order.id}">Pay</button> 
+            </div>
+          </div>
+        `;
+        
+        container.appendChild(card);
+      });
+      
+      // Add click handlers for pay buttons
+      document.querySelectorAll('.btn-pay').forEach(btn => {
+        btn.addEventListener('click', async function() {
+          const orderId = this.getAttribute('data-id');
+          const button = this;
+          
+          try {
+            button.disabled = true;
+            button.textContent = 'Processing...';
+            
+            await API.updatePaymentStatus(orderId, 'Paid');
+            
+            // Show success message
+            showToast('Payment successful! Order has been moved to shipping.');
+            
+            // Reload the page to refresh the list
+            loadOrders();
+          } catch (error) {
+            button.disabled = false;
+            button.textContent = 'Pay';
+            showToast('Payment failed: ' + error.message);
+          }
+        });
+      });
+
+      // Add click handlers for cancel buttons
+      document.querySelectorAll('.btn-cancel').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const orderId = this.getAttribute('data-id');
+          const orderRef = this.getAttribute('data-ref');
+          cancelOrder(orderId, orderRef);
+        });
+      });
+    } catch (error) {
+      console.error('Error loading orders:', error);
+      document.getElementById('ordersContainer').innerHTML = '<p style="text-align: center; color: #666;">Error loading orders</p>';
+    }
+  }
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', loadOrders);
+</script>
+
+
+</body>
+</html>

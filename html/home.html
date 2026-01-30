@@ -119,41 +119,107 @@
 
       <!-- Dashboard Grid -->
       <section class="dashboard-grid">
-        <div class="card sales-card">
-          <h3>📊 Summary</h3>
-          <div class="sales-content">
-            <div class="summary-grid">
-              <div class="summary-item">
-                <span class="summary-value" id="totalCustomers">0</span>
-                <span class="summary-label">Customers</span>
+        <!-- Left Column: Sales + Quick Stats -->
+        <div class="left-column">
+          <!-- Sales Report Card - Compact -->
+          <div class="card sales-card">
+            <h3>⭐ Sales Report</h3>
+            <div class="sales-content">
+              <div class="months">
+                <div class="circle" id="month1">
+                  <span>0</span>
+                  <small id="month1Label">---</small>
+                </div>
+                <div class="circle" id="month2">
+                  <span>0</span>
+                  <small id="month2Label">---</small>
+                </div>
+                <div class="circle" id="month3">
+                  <span>0</span>
+                  <small id="month3Label">---</small>
+                </div>
               </div>
-              <div class="summary-item">
-                <span class="summary-value" id="totalItems">0</span>
-                <span class="summary-label">Items</span>
+              <div class="total-sales">
+                <h2 id="totalSalesAmount">0</h2>
+                <span>Total Sales</span>
               </div>
-              <div class="summary-item">
-                <span class="summary-value" id="totalPayments">0</span>
-                <span class="summary-label">Payments</span>
+            </div>
+          </div>
+
+          <!-- Quick Stats Row -->
+          <div class="quick-stats-row">
+            <div class="quick-stat">
+              <i class="fa-solid fa-users"></i>
+              <div>
+                <span class="quick-value" id="totalCustomers">0</span>
+                <small>Customers</small>
               </div>
+            </div>
+            <div class="quick-stat">
+              <i class="fa-solid fa-cubes"></i>
+              <div>
+                <span class="quick-value" id="totalItems">0</span>
+                <small>Products</small>
+              </div>
+            </div>
+            <div class="quick-stat">
+              <i class="fa-solid fa-star"></i>
+              <div>
+                <span class="quick-value" id="totalReviews">0</span>
+                <small>Reviews</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Selling Items with Bar Chart -->
+          <div class="card chart-card">
+            <h3>⭐ Top Selling Items</h3>
+            <div class="top-items-chart" id="topItemsChart">
+              <p class="no-data">Loading...</p>
             </div>
           </div>
         </div>
 
-        <div class="card full">
-          <h3>⭐ Top Selling Items</h3>
-          <div id="topItemsList" class="top-items-list">
-            <p class="no-data">Loading...</p>
-          </div>
-        </div>
-
+        <!-- Right Column: Feedback -->
         <div class="card feedback-card">
           <h3>❤️ Recent Customer Feedback</h3>
           <div class="rating">
             <div class="score" id="avgRating">0<sub>/5</sub></div>
-            <span class="rating-label">Average Rating</span>
+            <div class="rating-bars">
+              <div class="rating-row">
+                <span>5</span>
+                <div class="bar-container">
+                  <div class="bar green" id="bar5" style="width: 0%;"></div>
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>4</span>
+                <div class="bar-container">
+                  <div class="bar green" id="bar4" style="width: 0%;"></div>
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>3</span>
+                <div class="bar-container">
+                  <div class="bar yellow" id="bar3" style="width: 0%;"></div>
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>2</span>
+                <div class="bar-container">
+                  <div class="bar orange" id="bar2" style="width: 0%;"></div>
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>1</span>
+                <div class="bar-container">
+                  <div class="bar red" id="bar1" style="width: 0%;"></div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div id="recentReviews">
+          <div id="recentReviews" class="reviews-container">
             <div class="review">
               <strong>Loading...</strong>
             </div>
@@ -184,6 +250,16 @@
     window.location.href = 'Sign-In.html';
   }
 
+  // Format number to K format (e.g., 10000 -> 10K)
+  function formatToK(num) {
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(0) + 'M';
+    } else if (num >= 1000) {
+      return (num / 1000).toFixed(0) + 'K';
+    }
+    return num.toLocaleString();
+  }
+
   // Load dashboard data
   async function loadDashboard() {
     // Check if user is authenticated
@@ -206,15 +282,20 @@
       updateElement('activeOrders', stats.active_orders.toLocaleString());
       updateElement('toShip', stats.to_ship.toLocaleString());
       updateElement('totalRevenue', '₱' + Number(stats.total_revenue).toLocaleString());
-      updateElement('totalCustomers', stats.total_customers.toLocaleString());
-      updateElement('totalItems', stats.total_items.toLocaleString());
-      updateElement('totalPayments', stats.total_orders.toLocaleString());
       
-      // Load top items
-      await loadTopItems();
+      // Update quick stats
+      updateElement('totalCustomers', stats.total_customers || 0);
+      updateElement('totalItems', stats.total_items || 0);
       
-      // Load recent reviews
+      // Load sales report
+      await loadSalesReport();
+      
+      // Load top items chart
+      await loadTopItemsChart();
+      
+      // Load recent reviews and rating distribution
       await loadRecentReviews();
+      await loadRatingDistribution();
       
     } catch (error) {
       console.error('Error loading dashboard:', error);
@@ -228,29 +309,120 @@
     }
   }
 
-  async function loadTopItems() {
+  async function loadSalesReport() {
     try {
-      const items = await API.getTopItems();
-      const container = document.getElementById('topItemsList');
+      const salesData = await API.getSalesReport();
+      
+      // Update monthly circles
+      if (salesData.months && salesData.months.length >= 3) {
+        // Month 1
+        document.querySelector('#month1 span').textContent = formatToK(salesData.months[0].amount);
+        document.getElementById('month1Label').textContent = salesData.months[0].month;
+        
+        // Month 2
+        document.querySelector('#month2 span').textContent = formatToK(salesData.months[1].amount);
+        document.getElementById('month2Label').textContent = salesData.months[1].month;
+        
+        // Month 3 (current)
+        document.querySelector('#month3 span').textContent = formatToK(salesData.months[2].amount);
+        document.getElementById('month3Label').textContent = salesData.months[2].month;
+      }
+      
+      // Update total sales
+      document.getElementById('totalSalesAmount').textContent = formatToK(salesData.total_sales);
+      
+    } catch (error) {
+      console.error('Error loading sales report:', error);
+    }
+  }
+
+  async function loadTopItemsChart() {
+    try {
+      const items = await API.getTopItemsChart();
+      const container = document.getElementById('topItemsChart');
       
       if (!container) return;
       
-      if (items.length === 0) {
+      if (!items || items.length === 0) {
         container.innerHTML = '<p class="no-data">No items sold yet</p>';
         return;
       }
       
-      container.innerHTML = items.map((item, index) => `
-        <div class="top-item">
-          <span class="rank">#${index + 1}</span>
-          <span class="item-name">${item.name}</span>
-          <span class="item-count">${item.count} orders</span>
-        </div>
-      `).join('');
+      // Find max for scaling - use the highest sales value
+      const maxSales = Math.max(...items.map(i => i.total_sales));
+      const maxBarHeight = 110; // Maximum bar height in pixels
+      const minBarHeight = 10; // Minimum bar height for visibility
+      
+      console.log('Top items data:', items);
+      console.log('Max sales:', maxSales);
+      
+      // Build bars HTML with LINEAR scaling (proportional to actual values)
+      let barsHtml = '<div class="bar-chart-container">';
+      
+      items.forEach(item => {
+        // LINEAR scaling: height = (value / max) * maxHeight
+        // This means if max is 1M and value is 156K, height will be 156K/1M * 160 = 25px
+        let heightPx = minBarHeight;
+        if (maxSales > 0 && item.total_sales > 0) {
+          heightPx = Math.max(minBarHeight, Math.round((item.total_sales / maxSales) * maxBarHeight));
+        }
+        
+        const shortName = item.name.length > 12 ? item.name.substring(0, 12) + '...' : item.name;
+        
+        console.log(`${item.name}: ₱${item.total_sales.toLocaleString()} -> ${heightPx}px (${(item.total_sales/maxSales*100).toFixed(1)}% of max)`);
+        
+        barsHtml += `
+          <div class="bar-column">
+            <div class="bar-value">₱${formatToK(item.total_sales)}</div>
+            <div class="bar-fill" style="height: ${heightPx}px;"></div>
+            <div class="bar-label">${shortName}</div>
+          </div>
+        `;
+      });
+      
+      barsHtml += '</div>';
+      container.innerHTML = barsHtml;
       
     } catch (error) {
-      console.error('Error loading top items:', error);
-      document.getElementById('topItemsList').innerHTML = '<p class="no-data">Failed to load</p>';
+      console.error('Error loading top items chart:', error);
+      const container = document.getElementById('topItemsChart');
+      if (container) {
+        container.innerHTML = '<p class="no-data">Failed to load</p>';
+      }
+    }
+  }
+
+  async function loadRatingDistribution() {
+    try {
+      const data = await API.getRatingDistribution();
+      
+      console.log('Rating distribution data:', data);
+      
+      if (!data || !data.distribution) return;
+      
+      // Calculate total reviews for the quick stat
+      let totalReviews = 0;
+      for (let i = 5; i >= 1; i--) {
+        if (data.distribution[i.toString()]) {
+          totalReviews += data.distribution[i.toString()].count;
+        }
+      }
+      updateElement('totalReviews', totalReviews);
+      
+      // Update each bar width based on percentage
+      for (let i = 5; i >= 1; i--) {
+        const barEl = document.getElementById(`bar${i}`);
+        if (barEl && data.distribution[i.toString()]) {
+          const percentage = data.distribution[i.toString()].percentage;
+          // Ensure minimum width of 3% for visibility when there's at least 1 review
+          const barWidth = data.distribution[i.toString()].count > 0 ? Math.max(percentage, 3) : 0;
+          barEl.style.width = `${barWidth}%`;
+          console.log(`Bar ${i}: ${percentage}% (${data.distribution[i.toString()].count} reviews)`);
+        }
+      }
+      
+    } catch (error) {
+      console.error('Error loading rating distribution:', error);
     }
   }
 
@@ -262,9 +434,10 @@
       if (!container) return;
       
       if (reviews.length === 0) {
-        container.innerHTML = '<div class="review"><p class="no-data">No reviews yet</p></div>';
+        container.innerHTML = '<div class="review-card"><p class="no-data">No reviews yet</p></div>';
         // Update average rating to 0
-        updateElement('avgRating', '0');
+        const avgElement = document.getElementById('avgRating');
+        if (avgElement) avgElement.innerHTML = '0<sub>/5</sub>';
         return;
       }
       
@@ -276,19 +449,29 @@
       }
       
       container.innerHTML = reviews.map(review => `
-        <div class="review">
-          <div class="review-header">
-            <strong>${review.item_name}</strong>
-            <span class="review-rating">${'★'.repeat(Math.round(review.rating))}</span>
+        <div class="review-card">
+          <div class="review-card-header">
+            <div class="reviewer-avatar">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="reviewer-info">
+              <span class="reviewer-name">${review.customer_name}</span>
+              <span class="reviewer-rating">★ ${review.rating.toFixed(1)} / 5.0</span>
+            </div>
           </div>
-          <p class="review-comment">${review.comment || 'No comment'}</p>
-          <span class="review-author">- ${review.customer_name}</span>
+          <div class="review-card-body">
+            <p class="review-product"><strong>Product:</strong> ${review.item_name}</p>
+            <p class="review-text">${review.comment || 'No comment provided.'}</p>
+          </div>
         </div>
       `).join('');
       
     } catch (error) {
       console.error('Error loading reviews:', error);
-      document.getElementById('recentReviews').innerHTML = '<div class="review"><p class="no-data">Failed to load</p></div>';
+      const container = document.getElementById('recentReviews');
+      if (container) {
+        container.innerHTML = '<div class="review-card"><p class="no-data">Failed to load</p></div>';
+      }
     }
   }
 

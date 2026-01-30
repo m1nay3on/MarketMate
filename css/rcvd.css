@@ -1,0 +1,828 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Aoboshi One', serif;
+}
+
+body {
+  background-image:
+    linear-gradient(135deg, #000000, #EAE0CF);
+}
+
+/* Ensure the wrapper takes up the full width minus the sidebar */
+.content-wrapper {
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* Prevents flex children from overflowing */
+}
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: #1f2f3f;
+  display: flex;
+  align-items: center;
+  padding: 0 25px;
+  z-index: 1000;
+    gap: 15px;
+
+}
+
+
+/* Logo */
+.logo {
+  width: 165px;
+  margin-left: 6px;
+}
+
+
+/* Search */
+.search-container {
+  flex: 1;
+  max-width: 1100px; /* control size */
+  position: relative;
+  margin-left: auto; /* PUSHES IT RIGHT */
+  margin-right: 20px; /* space before profile */
+}
+
+
+.search-container input {
+  width: 100%;
+  padding: 10px 40px;
+  border-radius: 4px;
+  border: 2px solid #2aa8ff;
+  outline: none;
+  font-size: 14px;
+  padding-right: 50px;
+}
+
+.search-container i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #555;
+}
+
+/* Profile */
+.profile img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-right: 35px;
+  
+}
+
+
+body {
+  background: #0e1a24;
+}
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 80px;                 /* SAME AS NAVBAR HEIGHT */
+  width: 260px;
+  height: calc(100vh - 80px); /* prevent overflow */
+  background: #f9f4ea;
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+  z-index: 900;
+}
+
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+
+/* Close button */
+.close-btn {
+  position: absolute;
+  right: -18px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #1f2f3f;
+  color: white;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.open-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 26px;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+/* Sidebar specific styles to match the image */
+.menu {
+  list-style: none;
+  padding: 40px 20px; /* Increased top padding */
+}
+
+.menu li {
+  margin-bottom: 10px;
+}
+
+.menu li a {
+  text-decoration: none;
+  color: #000; /* Black text as seen in image */
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 1.1rem;
+}
+
+/* Icons styling */
+.menu li i {
+  font-size: 1.2rem;
+  width: 25px;
+  text-align: center;
+}
+
+.section-label {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
+  cursor: default;
+}
+
+/* Logout positioned lower down */
+.logout {
+  margin-top: auto; /* Pushes to bottom if container is flex */
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+}
+
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+
+.layout.sidebar-closed .main-content {
+  margin-left: 0;
+}
+
+
+
+/* Positioning the Main Content relative to Sidebar/Navbar */
+.main-content {
+  margin-top: 80px; 
+  margin-left: 260px; 
+  padding: 30px;
+  transition: margin-left 0.3s ease;
+  background: #e9dfcf;
+
+  
+
+  
+  /* ADD THESE THREE LINES */
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 80px); /* This makes it at least as tall as the screen */
+}
+
+/* Ensure the links take up the full space of the list item */
+.menu li {
+  padding: 0; /* Remove padding from li so the link can fill it */
+}
+
+.menu li a {
+  text-decoration: none; /* Remove underline */
+  color: inherit;       /* Keep the original text color */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;    /* Move padding here so the whole area is clickable */
+  width: 100%;
+  transition: background 0.3s ease;
+}
+
+.menu li a i {
+  width: 20px;
+  text-align: center;
+}
+
+/* Move your hover effect to the anchor tag */
+.menu li a:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+}
+
+/* Ensure Logout link stays red */
+.logout a {
+  color: #b00020 !important;
+}
+
+/* Adjust content when sidebar is closed */
+.layout.sidebar-closed .main-content {
+  margin-left: 0;
+}
+
+/* Header styling */
+.header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  color: black;
+}
+
+
+/* Table Container styling */
+.table-container {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  overflow-y: auto; /* Adds a scrollbar if you have TOO many orders */
+
+  /* ADD THIS LINE */
+  flex: 1; 
+  
+   /* Optional: adds a little gap at the very bottom */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th {
+  padding: 15px;
+  border-bottom: 2px solid #eee;
+  color: #555;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+td {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+  font-size: 15px;
+}
+
+tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Status Badge Styling */
+.status {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.status.delivered { background: #e6ffed; color: #28a745; }
+.status.pending { background: #fff9db; color: #f08c00; }
+.status.shipped { background: #e7f5ff; color: #228be6; }
+.status.cancelled { background: #fff5f5; color: #fa5252; }
+
+
+/* Header styling */
+.header-flex h1 {
+  font-size: 2.5rem;
+}
+
+
+.rating {
+  font-size: 11px; /* Slightly larger for better visibility */
+  color: black;
+  text-align: left;
+  margin-bottom: 7px; /* Cleaned up to one value */
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1;
+}
+
+.rating .star {
+  color: #FFA500 !important; /* This forces the orange color */
+  font-size: 18px; /* Makes the star pop more like in your screenshot */
+}
+
+/* Card Buttons */
+/* Container for the buttons */
+.card-actions {
+  display: flex;
+  justify-content: center; /* Centers the buttons horizontally */
+  gap: 4px;               /* Space between the two buttons */
+  margin-top: 10px;
+  margin-bottom: 10px;     /* Added spacing at the bottom of the card */
+}
+
+/* Page Title */
+.page-title {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #000;
+}
+
+/* Status Tabs */
+.status-tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 30px;
+}
+
+.tab-btn {
+  flex: 1;
+  text-align: center;
+  padding: 12px 0;
+  background: #fff;
+  border-radius: 14px;
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  transition: 0.25s ease;
+  display: block;
+}
+
+.tab-btn:hover {
+  background: #ddd2bf;
+}
+
+.tab-btn.active {
+  background: #1f3349;
+  color: white;
+}
+
+
+/* The purple '$' notification badge */
+.badge {
+  position: absolute;
+  top: -10px;
+  right: 15px;
+  background: #7b42f5;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Order Cards */
+.orders-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.order-header {
+  text-align: right;
+  margin-bottom: 15px;
+}
+
+.order-id {
+  font-size: 14px;
+}
+
+/* Updated Item Details Container */
+.item-details {
+  display: flex;
+  gap: 20px;
+  /* Change 'center' to 'flex-start' to align text to the top */
+  align-items: flex-start; 
+  margin-bottom: 5px;
+}
+
+/* Updated Image Styling */
+.order-item-img {
+  width: 140px;          /* Reduced from 200px to make container smaller */
+  height: 140px;         /* Match width */
+  flex-shrink: 0;
+  object-fit: contain;
+}
+/* Adjusting the text area to align with the larger image */
+.item-text h3 {
+  font-size: 17px;       /* Slightly larger title */
+  margin-bottom: 8px;
+  margin-top: 0;
+}
+
+.item-text p {
+  margin-bottom: 4px;    /* Better spacing for the info lines */
+}
+
+.variation, .qty {
+  font-size: 12px;
+  color: black;
+}
+
+.item-divider {
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin: 15px 0;
+}
+
+/* Footer & Pay Button */
+
+.total-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.total-label {
+  font-size: 18px;
+}
+
+.total-price {
+  font-size: 20px;
+}
+
+
+/* Green preparation message */
+.status-msg {
+  color: #28a745;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+
+/* Ensure the card allows the right column to stretch the full height */
+.order-card {
+  background: white;
+  border-radius: 8px;
+  padding: 25px 40px;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  display: flex;           /* Added: Use flex to put Item and Right-Side side-by-side */
+  justify-content: space-between;
+  min-height: 200px;       /* Added: Ensures there is enough vertical space for the layout */
+}
+
+.item-details {
+  display: flex;
+  gap: 25px;
+  align-items: flex-start;
+}
+
+/* The Magic happens here */
+.order-right-column {
+  display: flex;
+  flex-direction: column;   /* Stack IDs on top and Total on bottom */
+  justify-content: space-between; /* This pushes IDs to top, Total to bottom */
+  text-align: right;        /* Aligns all text inside to the right */
+  padding-bottom: 5px;
+}
+
+.order-ids {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.total-section {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.total-label {
+  font-size: 18px;
+}
+
+.total-price {
+  font-size: 24px;
+}
+/* Adjusting the text items to match the screenshot spacing */
+.item-text .price {
+  display: none; /* Hide the price inside the body as per design */
+}
+
+/* Ensure the total price doesn't have the currency symbol if you want it exactly like the pic */
+.total-price {
+  font-size: 22px;
+}
+
+/* Container for both the item details and the IDs */
+
+/* Ensure the left side stays together */
+.item-details {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+
+.order-ids-side .order-id, 
+.order-ids-side .shipping-id {
+  font-size: 14px;
+  color: #000;
+}
+
+/* Remove the old header class if it's still in your CSS */
+.order-header-ship {
+  display: none;
+}
+/* Modal Overlay */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+}
+
+.item-modal {
+  background-color: #d1d1d1;
+  width: 900px;
+  padding: 40px;
+  border-radius: 20px;
+  position: relative;
+}
+
+.modal-flex {
+  display: flex;
+  gap: 40px;
+}
+
+/* Update this specific selector in your CSS */
+.form-group textarea {
+  width: 100%;
+  height: 150px; /* Adjust this value to make it taller */
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  resize: none; /* Prevents user from manually resizing and breaking your layout */
+  font-family: inherit; /* Ensures the font matches your inputs */
+}
+.form-group label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.form-group input, 
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px; /* Matches the sharp but slightly rounded corners in Pic 1 */
+  font-size: 14px;
+  background-color: white;
+  
+}
+
+/* Update these specific selectors in your CSS */
+
+.btn-upload, .btn-delete-img, .btn-submit-item {
+  font-size: 14px;
+  transition: transform 0.1s;
+}
+
+.btn-upload { background: #004d61; } /* Darker teal */
+.btn-delete-img { background: #ff0000; } /* Bright red */
+
+.btn-submit-item {
+  width: 60%; /* Makes the "Add Item" button wide like in the pic */
+  background: #004d61;
+  padding: 15px;
+  font-size: 16px;
+}
+
+.image-preview-box img { max-height: 100%; max-width: 100%; }
+
+.image-actions {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.btn-upload, .btn-delete-img {
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.btn-upload { background: #104a61; }
+.btn-delete-img { background: red; }
+
+.btn-submit-item {
+  background: #104a61;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 25px;
+  border: none;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+
+
+/* COMPLETED ORDER CARD */
+.completed {
+  width: 100%;
+}
+
+.completed-card {
+  width: 100%;
+  background: white;
+  border-radius: 20px;
+  padding: 25px 30px;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* IMAGE */
+.order-image img {
+  width: 85px;
+  border-radius: 12px;
+}
+
+/* DETAILS NEXT TO IMAGE */
+.order-details {
+  flex: 1;
+}
+
+.order-details h3 {
+  font-size: 18px;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.variant {
+  font-size: 11px;
+  color: #000000;
+  font-weight: bold;
+}
+
+.quantity {
+  font-size: 11px;
+  color: #000000;
+  font-weight: bold;
+}
+
+.status {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #2e7d32;
+}
+
+/* META RIGHT SIDE */
+.order-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* space between Order ID & Shipping ID */
+  text-align: right;
+  font-size: 14px;
+}
+
+.total-rate {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* space between total and button */
+  margin-top: 15px; /* spacing from Shipping ID */
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.tab-link {
+  flex: 1;
+  text-decoration: none;
+}
+
+.received {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* ===== ORDER CARD ===== */
+
+.order-card {
+  width: 100%;
+  background: white;
+  border-radius: 22px;
+  padding: 25px 30px;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* IMAGE */
+
+.order-image img {
+  width: 85px;
+  border-radius: 12px;
+}
+
+/* DETAILS */
+
+.order-details {
+  flex: 1;
+}
+
+.order-details h3 {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.variant,
+.quantity {
+  font-size: 11px;
+  color: #000;
+  font-weight: bold;
+}
+
+.status {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #2e7d32;
+}
+
+/* META */
+
+.order-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: right;
+  font-size: 14px;
+}
+
+/* TOTAL + BUTTON */
+
+.total-rate {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+/* ===== PILL BUTTON ===== */
+
+.btn-received {
+  padding: 8px 18px;
+  background-color: #eeda2b;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #fff;
+  font-size: 13px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+.btn-received:hover {
+  background-color: #524c16;
+  transform: translateY(-1px);
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #1f3349;
+  color: white;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: all 0.4s ease;
+  z-index: 2000;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}

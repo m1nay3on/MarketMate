@@ -12,7 +12,7 @@ from decimal import Decimal
 sys.path.insert(0, '.')
 
 from backend.config import settings
-from backend.models.models import Base, User, Customer, Item, Order, Shipping, Payment, Review, Reward
+from backend.models.models import Base, User, Customer, Item, Order, Shipping, Payment, Review, Reward, UserRole
 from backend.utils.auth_utils import get_password_hash
 
 # Create engine and session
@@ -35,6 +35,7 @@ def seed_database():
                 username="admin",
                 email="admin@marketmate.com",
                 password_hash=get_password_hash("admin123"),
+                role=UserRole.admin,
                 shop_name="MarketMate Store"
             )
             db.add(admin)

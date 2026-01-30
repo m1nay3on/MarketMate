@@ -84,26 +84,28 @@
 <main class="main-content">
   <h1 class="page-title">Reviews</h1>
 
-  <div class="review-card">
-    <div class="back-nav">
-      <i class="fa-solid fa-arrow-left"></i>
-    </div>
+  <!-- Product Cards Grid -->
+  <div class="items-grid" id="itemsGrid">
+    <p style="text-align: center; color: #666; grid-column: 1 / -1;">Loading products...</p>
+  </div>
 
-    <div class="card-grid">
-      <div class="product-sidebar">
-        <div class="product-image-container">
-          <img src="../images/iphonee.jpg" alt="Product" class="product-image" id="productImage">
+  <!-- Reviews Modal -->
+  <div class="modal" id="reviewsModal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div class="modal-header">
+        <img src="../images/iphonee.jpg" alt="Product" class="modal-product-image" id="modalProductImage">
+        <div class="modal-product-info">
+          <h2 id="modalProductTitle">Product Name</h2>
+          <div class="main-rating">
+            <span class="star">★</span> <span id="modalAvgRating">0.0</span> / 5.0
+          </div>
+          <p class="review-count" id="modalReviewCount">0 reviews</p>
         </div>
-        <h2 class="product-title" id="productTitle">All Reviews</h2>
-        <div class="main-rating">
-          <span class="star">★</span> <span id="avgRating">0.0</span> / 5.0
-        </div>
-        <p class="review-count" id="reviewCount">0 reviews</p>
       </div>
-
       <div class="reviews-container" id="reviewsContainer">
         <p style="text-align: center; color: #aaa;">Loading reviews...</p>
-        </div>
+      </div>
     </div>
   </div>
 </main>

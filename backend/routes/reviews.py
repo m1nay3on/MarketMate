@@ -4,6 +4,7 @@ Review routes for CRUD operations
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 
 from backend.database.connection import get_db
 from backend.models import models, schemas
@@ -41,6 +42,36 @@ async def get_all_reviews(
         for review in reviews
     ]
 
+@router.get("/items-with-reviews")
+async def get_items_with_reviews(
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Get all items with their review counts and average ratings for the sidebar"""
+    items = db.query(
+        models.Item,
+        func.count(models.Review.id).label('review_count'),
+        func.coalesce(func.avg(models.Review.rating), 0).label('avg_rating')
+    ).outerjoin(
+        models.Review, models.Item.id == models.Review.item_id
+    ).filter(
+        models.Item.user_id == current_user.id
+    ).group_by(
+        models.Item.id
+    ).all()
+    
+    return [
+        {
+            "id": item.Item.id,
+            "item_id": item.Item.item_id,
+            "name": item.Item.name,
+            "image_url": item.Item.image_url,
+            "rating": round(float(item.avg_rating), 1),
+            "review_count": item.review_count
+        }
+        for item in items
+    ]
+
 @router.get("/item/{item_id}")
 async def get_reviews_by_item(
     item_id: int,
@@ -67,16 +98,30 @@ async def get_reviews_by_item(
         models.Review.created_at.desc()
     ).all()
     
-    return [
-        {
-            "id": review.id,
-            "customer_name": review.customer_name,
-            "rating": float(review.rating),
-            "comment": review.comment,
-            "created_at": review.created_at
-        }
-        for review in reviews
-    ]
+    # Calculate average rating
+    avg_rating = 0
+    if reviews:
+        avg_rating = sum(float(r.rating) for r in reviews) / len(reviews)
+    
+    return {
+        "item": {
+            "id": item.id,
+            "name": item.name,
+            "image_url": item.image_url,
+            "rating": round(avg_rating, 1)
+        },
+        "reviews": [
+            {
+                "id": review.id,
+                "customer_name": review.customer_name,
+                "rating": float(review.rating),
+                "comment": review.comment,
+                "created_at": review.created_at
+            }
+            for review in reviews
+        ],
+        "review_count": len(reviews)
+    }
 
 @router.get("/{review_id}", response_model=schemas.ReviewResponse)
 async def get_review(
@@ -104,12 +149,16 @@ async def create_review(
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """Create a new review"""
+    """Create a new review - can be created by item owner or customer who purchased the item"""
+    print(f"\n⭐ [CREATE REVIEW] Received data: {review_data}")
+    print(f"⭐ [CREATE REVIEW] Current user: {current_user.email}")
+    
     # Verify item exists
     item = db.query(models.Item).filter(
-        models.Item.id == review_data.item_id,
-        models.Item.user_id == current_user.id
+        models.Item.id == review_data.item_id
     ).first()
+    
+    print(f"⭐ [CREATE REVIEW] Found item: {item.name if item else 'None'}")
     
     if not item:
         raise HTTPException(
@@ -117,9 +166,38 @@ async def create_review(
             detail="Item not found"
         )
     
+    # Check if user is the item owner OR a customer who purchased this item
+    is_item_owner = item.user_id == current_user.id
+    
+    # Check if user is a customer who has completed order for this item
+    customer = db.query(models.Customer).filter(
+        models.Customer.email == current_user.email
+    ).first()
+    
+    has_purchased = False
+    if customer:
+        completed_order = db.query(models.Order).filter(
+            models.Order.customer_id == customer.id,
+            models.Order.item_id == review_data.item_id,
+            models.Order.status == models.OrderStatus.completed
+        ).first()
+        has_purchased = completed_order is not None
+    
+    if not (is_item_owner or has_purchased):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You can only review items you have purchased"
+        )
+    
+    # Use the current user's username as customer_name if not provided
+    customer_name = review_data.customer_name if review_data.customer_name else current_user.username
+    
     new_review = models.Review(
-        **review_data.dict(),
-        user_id=current_user.id
+        item_id=review_data.item_id,
+        customer_name=customer_name,
+        rating=review_data.rating,
+        comment=review_data.comment,
+        user_id=item.user_id  # Review belongs to the item's owner (admin)
     )
     
     db.add(new_review)

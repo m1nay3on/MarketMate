@@ -19,6 +19,7 @@ class UserLogin(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+    role: str = "user"
 
 class TokenData(BaseModel):
     user_id: Optional[int] = None
@@ -27,6 +28,7 @@ class UserResponse(BaseModel):
     id: int
     username: str
     email: str
+    role: str
     shop_name: str
     created_at: datetime
     
@@ -100,6 +102,13 @@ class OrderCreate(BaseModel):
     item_id: int
     payment_method: str
 
+# Customer Checkout Schema (for customer-facing purchases)
+class CustomerCheckout(BaseModel):
+    item_id: int
+    quantity: int = 1
+    payment_method: str
+    shipping_method: Optional[str] = "J&T Express"
+
 class OrderUpdate(BaseModel):
     status: Optional[str] = None
 
@@ -120,10 +129,15 @@ class OrderDetailResponse(BaseModel):
     order_id: str
     customer_name: str
     item_name: str
+    item_id: Optional[int] = None
+    image_url: Optional[str] = None
     customer_address: str
     payment_method: str
     status: str
     created_at: datetime
+    item_price: Optional[float] = 0
+    quantity: Optional[int] = 1
+    total_amount: Optional[float] = 0
 
 # Shipping Schemas
 class ShippingCreate(BaseModel):
@@ -184,8 +198,8 @@ class PaymentDetailResponse(BaseModel):
 # Review Schemas
 class ReviewCreate(BaseModel):
     item_id: int
-    customer_name: str
-    rating: Decimal = Field(..., ge=0, le=5)
+    customer_name: Optional[str] = None
+    rating: float = Field(..., ge=0, le=5)
     comment: Optional[str] = None
 
 class ReviewResponse(BaseModel):

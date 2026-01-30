@@ -11,7 +11,7 @@ import time
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Server configurations
-BACKEND_PORT = 8002
+BACKEND_PORT = 8003
 FRONTEND_PORT = 8080
 
 def check_database():

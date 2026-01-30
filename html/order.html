@@ -85,6 +85,7 @@
    <main class="main-content">
   <div class="header-flex">
     <h1>Orders</h1>
+    <button class="add-btn" onclick="openAddModal()"><i class="fa-solid fa-plus"></i> Add Order</button>
   </div>
 
   <div class="table-container">
@@ -108,6 +109,46 @@
   </div>
 </main>
 
+<!-- Add Order Modal -->
+<div id="addOrderModal" class="modal">
+  <div class="modal-content add-modal">
+    <span class="close-modal" onclick="closeAddModal()">&times;</span>
+    <h3>Add New Order</h3>
+    
+    <div class="form-group">
+      <label>Order ID</label>
+      <input type="text" id="newOrderId" placeholder="e.g., ORD-001" required>
+    </div>
+    
+    <div class="form-group">
+      <label>Customer</label>
+      <select id="newCustomerId" required>
+        <option value="">Select Customer</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label>Item</label>
+      <select id="newItemId" required>
+        <option value="">Select Item</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label>Payment Method</label>
+      <select id="newPaymentMethod" required>
+        <option value="GCash">GCash</option>
+        <option value="Maya">Maya</option>
+        <option value="COD">Cash on Delivery</option>
+        <option value="Card">Credit/Debit Card</option>
+        <option value="PayPal">PayPal</option>
+      </select>
+    </div>
+    
+    <button class="confirm-btn" onclick="addOrder()">Add Order</button>
+  </div>
+</div>
+
 <div id="statusModal" class="modal">
   <div class="modal-content">
     <span class="close-modal" onclick="closeModal()">&times;</span>
@@ -115,7 +156,8 @@
     <p class="modal-order-id">Order ID : <span id="displayOrderId"></span></p>
     
     <div class="status-options">
-      <button class="btn-opt btn-new" onclick="selectStatus('New', 'new')">New</button>
+      <button class="btn-opt btn-shipped" onclick="selectStatus('Shipped', 'shipped')">Shipped</button>
+      <button class="btn-opt btn-completed" onclick="selectStatus('Completed', 'completed')">Completed</button>
       <button class="btn-opt btn-pending" onclick="selectStatus('Pending', 'pending')">Pending</button>
       <button class="btn-opt btn-cancelled" onclick="selectStatus('Cancelled', 'cancelled')">Cancelled</button>
     </div>
@@ -124,7 +166,7 @@
   </div>
 </div>
 
-<script src="../js/api.js"></script>
+<script src="../js/api.js?v=5"></script>
 <script>
   const sidebar = document.getElementById("sidebar");
   const layout = document.getElementById("layout");
@@ -149,14 +191,29 @@
   let selectedStatusText = "";
   let selectedStatusClass = "";
 
+  // Check if user is authenticated
+  function checkAuth() {
+    if (!TokenManager.isAuthenticated()) {
+      alert('Please log in first');
+      window.location.href = 'Sign-In.html';
+      return false;
+    }
+    return true;
+  }
+
   // Load orders from API
   async function loadOrders() {
+    if (!checkAuth()) return;
+    
+    const tbody = document.getElementById('ordersTableBody');
+    
     try {
+      console.log('Fetching orders...');
       const orders = await API.getOrders();
-      const tbody = document.getElementById('ordersTableBody');
+      console.log('Orders received:', orders);
       tbody.innerHTML = '';
       
-      if (orders.length === 0) {
+      if (!orders || orders.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No orders found</td></tr>';
         return;
       }
@@ -165,9 +222,9 @@
         const row = tbody.insertRow();
         row.innerHTML = `
           <td>${order.order_id}</td>
-          <td>${order.customer_name}</td>
-          <td>${order.item_name}</td>
-          <td>${order.customer_address}</td>
+          <td>${order.customer_name || 'N/A'}</td>
+          <td>${order.item_name || 'N/A'}</td>
+          <td>${order.customer_address || 'N/A'}</td>
           <td>${order.payment_method}</td>
           <td><span class="status ${order.status}" data-id="${order.id}">${order.status}</span></td>
         `;
@@ -182,7 +239,7 @@
       });
     } catch (error) {
       console.error('Error loading orders:', error);
-      alert('Failed to load orders');
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: red;">Failed to load orders: ${error.message}</td></tr>`;
     }
   }
 
@@ -229,8 +286,71 @@
 
   window.onclick = function(event) {
     const modal = document.getElementById('statusModal');
+    const addModal = document.getElementById('addOrderModal');
     if (event.target == modal) {
       closeModal();
+    }
+    if (event.target == addModal) {
+      closeAddModal();
+    }
+  }
+
+  // Add Order Modal Functions
+  async function openAddModal() {
+    // Load customers and items for dropdowns
+    try {
+      const customers = await API.getCustomers();
+      const items = await API.getItems();
+      
+      const customerSelect = document.getElementById('newCustomerId');
+      customerSelect.innerHTML = '<option value="">Select Customer</option>';
+      customers.forEach(c => {
+        customerSelect.innerHTML += `<option value="${c.id}">${c.name} (${c.customer_id})</option>`;
+      });
+      
+      const itemSelect = document.getElementById('newItemId');
+      itemSelect.innerHTML = '<option value="">Select Item</option>';
+      items.forEach(i => {
+        itemSelect.innerHTML += `<option value="${i.id}">${i.name} (₱${i.price})</option>`;
+      });
+      
+      // Generate order ID
+      document.getElementById('newOrderId').value = `ORD-${Date.now().toString(36).toUpperCase()}`;
+      
+      document.getElementById('addOrderModal').style.display = 'flex';
+    } catch (error) {
+      alert('Failed to load data: ' + error.message);
+    }
+  }
+
+  function closeAddModal() {
+    document.getElementById('addOrderModal').style.display = 'none';
+  }
+
+  async function addOrder() {
+    const orderId = document.getElementById('newOrderId').value.trim();
+    const customerId = document.getElementById('newCustomerId').value;
+    const itemId = document.getElementById('newItemId').value;
+    const paymentMethod = document.getElementById('newPaymentMethod').value;
+    
+    if (!orderId || !customerId || !itemId) {
+      alert('Please fill in all required fields');
+      return;
+    }
+    
+    try {
+      await API.createOrder({
+        order_id: orderId,
+        customer_id: parseInt(customerId),
+        item_id: parseInt(itemId),
+        payment_method: paymentMethod
+      });
+      
+      alert('Order created successfully!');
+      closeAddModal();
+      loadOrders();
+    } catch (error) {
+      alert('Failed to create order: ' + error.message);
     }
   }
 

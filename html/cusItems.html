@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarketMate Items</title>
+  <link rel="stylesheet" href="../css/cusItems.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aoboshi+One&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome for search icon -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+</head>
+<body>
+ <div class="layout" id="layout">
+
+<aside class="sidebar" id="sidebar">
+  <button class="close-btn" onclick="closeSidebar()">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <ul class="menu">
+    <li>
+      <a href="cusItems.html">
+        <i class="fa-solid fa-desktop"></i> Items
+      </a>
+    </li>
+    <li>
+      <a href="status-pay.html">
+        <i class="fa-solid fa-box-open"></i> Status
+      </a>
+    </li>
+
+    <li class="section-label">Account</li>
+
+    <li>
+      <a href="cusItems.html">
+        <i class="fa-solid fa-house"></i> Home
+      </a>
+    </li>
+
+    <li class="logout">
+      <a href="#" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </li>
+  </ul>
+</aside>
+
+  <div class="content-wrapper">
+  <nav class="navbar">
+ <button class="open-btn" onclick="openSidebar()">
+  <i class="fa-solid fa-bars"></i>
+</button>
+
+  <img src="../images/MarketMate.png" class="logo" />
+
+  <div class="search-container">
+    <i class="fa fa-search"></i>
+    <input type="text" placeholder="Search" />
+  </div>
+
+  <div class="profile">
+    <img src="../images/ppft.png" />
+  </div>
+</nav>
+  
+<main class="main-content">
+  <div class="header-flex">
+    <h1>Items</h1>
+    <button class="cart-btn-main" onclick="openCartModal()">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span class="cart-badge" id="cartBadge">0</span>
+    </button>
+  </div>
+
+  <div class="items-grid" id="itemsGrid">
+    <p style="text-align: center; color: #666;">Loading items...</p>
+  </div>
+    
+</main>
+
+<!-- CART MODAL -->
+<div id="cartModal" class="modal">
+  <div class="checkout-container cart-modal-container">
+    <span class="close-checkout" onclick="closeCartModal()">&times;</span>
+    
+    <h2><i class="fa-solid fa-cart-shopping"></i> Your Cart</h2>
+
+    <div class="cart-items-list" id="cartItemsList">
+      <p style="text-align: center; color: #666;">Your cart is empty</p>
+    </div>
+
+    <div class="checkout-footer cart-footer">
+      <p>Total: <span id="cartTotal">₱ 0</span></p>
+      <button class="btn-final-checkout" onclick="checkoutCart()">Checkout All</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div id="checkoutModal" class="modal">
+  <div class="checkout-container">
+    <span class="close-checkout" onclick="closeCheckoutModal()">&times;</span>
+    
+    <h2>Checkout</h2>
+
+    <div class="checkout-section">
+      <label>Customer Information*</label>
+      <div class="white-box customer-info" id="customerInfo">
+        <p>Loading customer info...</p>
+      </div>
+    </div>
+
+    <div class="checkout-section">
+      <label>Parcel</label>
+      <div class="white-box parcel-box" id="parcelBox">
+        <img src="../images/iphonee.jpg" alt="Product" id="checkoutItemImage">
+        <div class="parcel-details">
+          <h3 id="checkoutItemName">Product Name</h3>
+          <p id="checkoutItemVariant">Variation: N/A</p>
+          <p id="checkoutItemQty">x1</p>
+          <p class="parcel-price" id="checkoutItemPrice">0</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="checkout-section">
+      <label>Shipping</label>
+      <select class="checkout-input" id="shippingMethod">
+        <option value="J&T Express">J&T Express Delivery</option>
+        <option value="Lalamove">Lalamove</option>
+        <option value="Flash Express">Flash Express</option>
+      </select>
+    </div>
+
+    <div class="checkout-section">
+      <label>Voucher Code (Optional)</label>
+      <input type="text" class="checkout-input" id="voucherCode" placeholder="Enter voucher code">
+    </div>
+
+    <div class="checkout-section">
+      <label>Payment Method</label>
+      <select class="checkout-input" id="paymentMethod">
+        <option value="GCash">GCash</option>
+        <option value="Maya">Maya</option>
+        <option value="COD">Cash on Delivery</option>
+        <option value="Card">Credit/Debit Card</option>
+      </select>
+    </div>
+
+    <div class="checkout-footer">
+      <p>Order Total : <span id="checkoutTotal">0</span></p>
+      <button class="btn-final-checkout" onclick="submitOrder()">Checkout</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST MESSAGE -->
+<div id="toast" class="toast">Message</div>
+
+ <script src="../js/api.js"></script>
+ <script>
+  const sidebar = document.getElementById("sidebar");
+  const layout = document.getElementById("layout");
+  let currentItem = null;
+
+  function closeSidebar() {
+    sidebar.classList.add("closed");
+    layout.classList.add("sidebar-closed");
+  }
+
+  function openSidebar() {
+    sidebar.classList.remove("closed");
+    layout.classList.remove("sidebar-closed");
+  }
+
+  function logout() {
+    TokenManager.removeToken();
+    CartManager.clearCart();
+    window.location.href = 'Sign-In.html';
+  }
+
+  // Update cart badge count
+  function updateCartBadge() {
+    const count = CartManager.getItemCount();
+    const badge = document.getElementById('cartBadge');
+    badge.textContent = count;
+    badge.style.display = count > 0 ? 'flex' : 'none';
+  }
+
+  // Load items from API
+  async function loadItems() {
+    try {
+      const items = await API.getItems();
+      const grid = document.getElementById('itemsGrid');
+      grid.innerHTML = '';
+      
+      if (items.length === 0) {
+        grid.innerHTML = '<p style="text-align: center; color: #666;">No items available</p>';
+        return;
+      }
+      
+      items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'item-card';
+        
+        const imageUrl = item.image_url ? `../${item.image_url}` : '../images/iphonee.jpg';
+        const rating = item.rating ? Number(item.rating).toFixed(1) : '0.0';
+        const price = item.price ? `₱ ${Number(item.price).toLocaleString()}` : '₱ 0';
+        
+        card.innerHTML = `
+          <div class="image-placeholder">
+            <img src="${imageUrl}" alt="${item.name}">
+          </div>
+          <div class="item-info">
+            <h3>${item.name}</h3>
+            <p class="rating"><span class="star">★</span> ${rating} / 5.0</p>
+            <p class="price">${price}</p>
+            
+            <div class="customer-actions">
+              <button class="btn-buy-now" data-id="${item.id}" data-item='${JSON.stringify(item).replace(/'/g, "&#39;")}'>Buy Now</button>
+              <button class="btn-add-cart" data-id="${item.id}" data-item='${JSON.stringify(item).replace(/'/g, "&#39;")}'><i class="fa-solid fa-cart-plus"></i></button>
+            </div>
+          </div>
+        `;
+        
+        grid.appendChild(card);
+      });
+
+      // Add click handlers for Buy Now buttons
+      document.querySelectorAll('.btn-buy-now').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const itemData = JSON.parse(this.getAttribute('data-item').replace(/&#39;/g, "'"));
+          openCheckoutModal(itemData);
+        });
+      });
+
+      // Add click handlers for Add to Cart buttons
+      document.querySelectorAll('.btn-add-cart').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const itemData = JSON.parse(this.getAttribute('data-item').replace(/&#39;/g, "'"));
+          addToCart(itemData);
+        });
+      });
+    } catch (error) {
+      console.error('Error loading items:', error);
+      document.getElementById('itemsGrid').innerHTML = '<p style="text-align: center; color: #666;">Error loading items</p>';
+    }
+  }
+
+  // Add to Cart function
+  function addToCart(item) {
+    CartManager.addItem(item, 1);
+    updateCartBadge();
+    showToast(`${item.name} added to cart!`);
+  }
+
+  // Cart Modal Functions
+  const cartModal = document.getElementById("cartModal");
+
+  function openCartModal() {
+    renderCartItems();
+    cartModal.style.display = "flex";
+  }
+
+  function closeCartModal() {
+    cartModal.style.display = "none";
+  }
+
+  function renderCartItems() {
+    const cart = CartManager.getCart();
+    const listEl = document.getElementById('cartItemsList');
+    
+    if (cart.length === 0) {
+      listEl.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Your cart is empty</p>';
+      document.getElementById('cartTotal').textContent = '₱ 0';
+      return;
+    }
+    
+    let html = '';
+    cart.forEach(cartItem => {
+      const item = cartItem.item;
+      const imageUrl = item.image_url ? `../${item.image_url}` : '../images/iphonee.jpg';
+      const itemTotal = Number(item.price) * cartItem.quantity;
+      
+      html += `
+        <div class="cart-item" data-id="${item.id}">
+          <img src="${imageUrl}" alt="${item.name}" class="cart-item-img">
+          <div class="cart-item-details">
+            <h4>${item.name}</h4>
+            <p class="cart-item-price">₱ ${Number(item.price).toLocaleString()}</p>
+            <div class="cart-qty-controls">
+              <button onclick="updateCartQty(${item.id}, ${cartItem.quantity - 1})">-</button>
+              <span>${cartItem.quantity}</span>
+              <button onclick="updateCartQty(${item.id}, ${cartItem.quantity + 1})">+</button>
+            </div>
+          </div>
+          <div class="cart-item-total">
+            <p>₱ ${itemTotal.toLocaleString()}</p>
+            <button class="cart-remove-btn" onclick="removeFromCart(${item.id})"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </div>
+      `;
+    });
+    
+    listEl.innerHTML = html;
+    document.getElementById('cartTotal').textContent = `₱ ${CartManager.getTotal().toLocaleString()}`;
+  }
+
+  function updateCartQty(itemId, newQty) {
+    CartManager.updateQuantity(itemId, newQty);
+    updateCartBadge();
+    renderCartItems();
+  }
+
+  function removeFromCart(itemId) {
+    CartManager.removeItem(itemId);
+    updateCartBadge();
+    renderCartItems();
+    showToast('Item removed from cart');
+  }
+
+  async function checkoutCart() {
+    const cart = CartManager.getCart();
+    console.log('🛒 Cart checkout initiated:', cart);
+    if (cart.length === 0) {
+      showToast('Your cart is empty');
+      return;
+    }
+
+    try {
+      const paymentMethod = 'COD'; // Default payment method for cart checkout
+      const shippingMethod = 'J&T Express'; // Default shipping
+
+      // Create orders for each cart item
+      console.log('🛒 Creating orders for', cart.length, 'items');
+      for (const cartItem of cart) {
+        const orderData = {
+          item_id: cartItem.item.id,
+          quantity: cartItem.quantity,
+          payment_method: paymentMethod,
+          shipping_method: shippingMethod
+        };
+        console.log('🛒 Creating order:', orderData);
+        const order = await API.customerCheckout(orderData);
+        console.log('✅ Order created:', order);
+      }
+      
+      // Clear cart after successful checkout
+      CartManager.clearCart();
+      updateCartBadge();
+      closeCartModal();
+      
+      showToast('All orders placed successfully!');
+      
+      console.log('🛒 Redirecting to status page...');
+      // Redirect to status page after short delay
+      setTimeout(() => {
+        window.location.href = 'status-pay.html';
+      }, 1500);
+    } catch (error) {
+      console.error('❌ Checkout failed:', error);
+      showToast('Failed to place orders: ' + error.message);
+    }
+  }
+
+  // Checkout Modal Functions
+  const checkoutModal = document.getElementById("checkoutModal");
+
+  async function openCheckoutModal(item) {
+    currentItem = item;
+    
+    // Load customer info
+    try {
+      const user = await API.getCurrentUser();
+      document.getElementById('customerInfo').innerHTML = `
+        <p>${user.username || 'Customer'}</p>
+        <p>${user.email || 'N/A'}</p>
+      `;
+    } catch (e) {
+      document.getElementById('customerInfo').innerHTML = '<p>Guest Customer</p>';
+    }
+    
+    // Set item details
+    const imageUrl = item.image_url ? `../${item.image_url}` : '../images/iphonee.jpg';
+    document.getElementById('checkoutItemImage').src = imageUrl;
+    document.getElementById('checkoutItemName').textContent = item.name;
+    document.getElementById('checkoutItemVariant').textContent = 'Variation: Default';
+    document.getElementById('checkoutItemQty').textContent = 'x1';
+    document.getElementById('checkoutItemPrice').textContent = item.price ? Number(item.price).toLocaleString() : '0';
+    document.getElementById('checkoutTotal').textContent = item.price ? `₱ ${Number(item.price).toLocaleString()}` : '₱ 0';
+    
+    checkoutModal.style.display = "flex";
+  }
+
+  function closeCheckoutModal() {
+    checkoutModal.style.display = "none";
+    currentItem = null;
+  }
+
+  async function submitOrder() {
+    if (!currentItem) {
+      showToast("No item selected");
+      return;
+    }
+
+    try {
+      // Create order via API
+      const orderData = {
+        item_id: currentItem.id,
+        quantity: 1,
+        payment_method: document.getElementById('paymentMethod').value,
+        shipping_method: document.getElementById('shippingMethod').value
+      };
+
+      console.log('🛒 Submitting single order:', orderData);
+      const order = await API.customerCheckout(orderData);
+      console.log('✅ Single order created:', order);
+      
+      showToast("Order placed successfully!");
+      closeCheckoutModal();
+      
+      console.log('🛒 Redirecting to status page...');
+      // Redirect to status page after short delay
+      setTimeout(() => {
+        window.location.href = 'status-pay.html';
+      }, 1500);
+    } catch (error) {
+      console.error('❌ Order submission failed:', error);
+      showToast("Failed to place order: " + error.message);
+    }
+  }
+
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  // Close modal on background click
+  window.addEventListener('click', (event) => {
+    if (event.target === checkoutModal) closeCheckoutModal();
+    if (event.target === cartModal) closeCartModal();
+  });
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    loadItems();
+    updateCartBadge();
+  });
+</script>
+
+
+</body>
+</html>

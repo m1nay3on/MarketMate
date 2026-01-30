@@ -310,7 +310,8 @@ tr:hover {
   background-color: #d1d1d1;
   padding: 30px;
   border-radius: 20px;
-  width: 450px;
+  width: 500px;
+  max-width: 90%;
   text-align: center;
   position: relative;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
@@ -333,7 +334,9 @@ tr:hover {
 /* Status Button Container */
 .status-options {
   display: flex;
-  justify-content: space-around;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
   margin: 25px 0;
 }
 
@@ -349,20 +352,17 @@ tr:hover {
 }
 
 /* Specific Colors for Shipping Modal Buttons */
-.btn-shipped { background-color: #00ff22; } /* Bright Green */
-.btn-preparing { background-color: #ffaa66; } /* Orange */
-.btn-cancelled { background-color: #ff0000; color: white; } /* Red */
+.btn-shipped { background-color: #2196F3; color: white; } /* Blue - In Transit */
+.btn-delivered { background-color: #4CAF50; color: white; } /* Green for delivered */
+.btn-preparing { background-color: #FF9800; color: white; } /* Orange - Preparing */
+.btn-cancelled { background-color: #f44336; color: white; } /* Red */
 
 /* Table Status Styles for Shipping */
-.status.shipped { background: #e6ffed; color: #28a745; } /* Table view green */
-.status.preparing { background: #fff9db; color: #f08c00; } /* Table view orange */
-.status.cancelled { background: #fff5f5; color: #fa5252; } /* Table view red */
-
-/* If you want the table status to match the bright colors of the buttons exactly, use these instead: */
-/* .status.shipped { background-color: #00ff22; color: #000; }
-.status.preparing { background-color: #ffaa66; color: #000; }
-.status.cancelled { background-color: #ff0000; color: #fff; }
-*/
+.status.shipped { background: #e3f2fd; color: #1976D2; } /* Blue - In Transit */
+.status.preparing { background: #fff3e0; color: #F57C00; } /* Orange - Preparing */
+.status.cancelled { background: #ffebee; color: #d32f2f; } /* Red - Cancelled */
+.status.delivered { background: #e8f5e9; color: #388E3C; } /* Green - Delivered */
+.status.paid { background: #fff3e0; color: #F57C00; } /* Orange - Paid, awaiting shipment */
 
 
 .confirm-btn {

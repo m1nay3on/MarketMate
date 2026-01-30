@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarketMate - To Receive</title>
+  <link rel="stylesheet" href="../css/rcvd.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aoboshi+One&display=swap" rel="stylesheet">
+  <!-- Font Awesome for search icon -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+</head>
+<body>
+ <div class="layout" id="layout">
+
+<aside class="sidebar" id="sidebar">
+  <button class="close-btn" onclick="closeSidebar()">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <ul class="menu">
+    <li>
+      <a href="cusItems.html">
+        <i class="fa-solid fa-desktop"></i> Items
+      </a>
+    </li>
+    <li>
+      <a href="status-pay.html">
+        <i class="fa-solid fa-box-open"></i> Status
+      </a>
+    </li>
+
+    <li class="section-label">Account</li>
+
+    <li>
+      <a href="cusItems.html">
+        <i class="fa-solid fa-house"></i> Home
+      </a>
+    </li>
+
+    <li class="logout">
+      <a href="#" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </li>
+  </ul>
+</aside>
+
+  <div class="content-wrapper">
+  <nav class="navbar">
+ <button class="open-btn" onclick="openSidebar()">
+  <i class="fa-solid fa-bars"></i>
+</button>
+
+  <img src="../images/MarketMate.png" class="logo" />
+
+  <div class="search-container">
+    <i class="fa fa-search"></i>
+    <input type="text" placeholder="Search" />
+  </div>
+
+  <div class="profile">
+    <img src="../images/ppft.png" />
+  </div>
+</nav>
+
+<div class="main-content">
+  <h1 class="page-title">Order Status</h1>
+
+  <div class="status-tabs">
+
+  <a href="status-pay.html" class="tab-btn">To Pay</a>
+
+  <a href="status-ship.html" class="tab-btn">To Ship</a>
+
+  <a href="rcvd.html" class="tab-btn active">To Receive</a>
+
+  <a href="cmpltd.html" class="tab-btn">Completed</a>
+
+</div>
+
+<!-- ORDERS -->
+<div class="received" id="receivedContainer">
+  <p style="text-align: center; color: #666;">Loading orders...</p>
+</div>
+
+    </main>
+  </div>
+
+ <script src="../js/api.js?v=5"></script>
+ <script>
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadReceivedOrders();
+});
+
+async function loadReceivedOrders() {
+  try {
+    // Get orders with status "shipped" - admin confirmed shipping, on the way to customer
+    const orders = await API.getMyOrders();
+    const container = document.getElementById('receivedContainer');
+    
+    // Filter for shipped orders (admin has shipped, customer waiting to receive)
+    const shippedOrders = orders.filter(order => {
+      const status = (order.status || '').toLowerCase();
+      return status === 'shipped';
+    });
+    
+    if (shippedOrders.length === 0) {
+      container.innerHTML = '<p style="text-align: center; color: #666;">No orders to receive</p>';
+      return;
+    }
+    
+    container.innerHTML = '';
+    
+    shippedOrders.forEach(order => {
+      const card = document.createElement('div');
+      card.className = 'order-card';
+      
+      const price = order.total_amount ? `${Number(order.total_amount).toLocaleString()}` : '0';
+      
+      card.innerHTML = `
+        <!-- PRODUCT IMAGE -->
+        <div class="order-image">
+          <img src="${order.image_url || '../images/iphonee.jpg'}" alt="Product">
+        </div>
+
+        <!-- ORDER DETAILS -->
+        <div class="order-details">
+          <h3>${order.item_name || 'Product'}</h3>
+          <p class="variant">Order #${order.order_id}</p>
+          <p class="quantity">x${order.quantity || 1}</p>
+          <p class="status">✔ Order is on the way</p>
+        </div>
+
+        <!-- ORDER META -->
+        <div class="order-meta">
+          <p>Order ID: ${order.order_id}</p>
+          <p class="total-rate">
+            <strong>Order Total:</strong> ₱${price}
+            <button class="btn-received" data-id="${order.id}">Received</button>
+          </p>
+        </div>
+      `;
+      
+      container.appendChild(card);
+    });
+    
+    // Add click handlers for received buttons
+    document.querySelectorAll('.btn-received').forEach(btn => {
+      btn.addEventListener('click', async function() {
+        const orderId = this.getAttribute('data-id');
+        try {
+          // Mark order as completed/delivered using customer endpoint
+          await API.updateMyOrder(orderId, { status: 'completed' });
+          showToastMessage("Order marked as received!");
+          loadReceivedOrders(); // Refresh the list
+        } catch (error) {
+          showToastMessage("Failed to update: " + error.message);
+        }
+      });
+    });
+  } catch (error) {
+    console.error('Error loading orders:', error);
+    document.getElementById('receivedContainer').innerHTML = '<p style="text-align: center; color: #666;">Error loading orders</p>';
+  }
+}
+
+// ================= GLOBAL FUNCTIONS =================
+
+function showToastMessage(msg) {
+  const toast = document.getElementById("toast");
+  if (toast) {
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(() => {
+      toast.classList.remove("show");
+    }, 2500);
+  } else {
+    alert(msg);
+  }
+}
+
+function closeSidebar() {
+  document.getElementById("sidebar")?.classList.add("closed");
+  document.getElementById("layout")?.classList.add("sidebar-closed");
+}
+
+function openSidebar() {
+  document.getElementById("sidebar")?.classList.remove("closed");
+  document.getElementById("layout")?.classList.remove("sidebar-closed");
+}
+
+function logout() {
+  TokenManager.removeToken();
+  window.location.href = 'Sign-In.html';
+}
+
+ </script>
+</div>  
+
+</body>
+</html>

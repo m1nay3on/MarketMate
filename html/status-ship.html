@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarketMate Order Status</title>
+  <link rel="stylesheet" href="../css/status-ship.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aoboshi+One&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome for search icon -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+</head>
+<body>
+ <div class="layout" id="layout">
+
+<aside class="sidebar" id="sidebar">
+  <button class="close-btn" onclick="closeSidebar()">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <ul class="menu">
+    <li>
+      <a href="cusItems.html">
+        <i class="fa-solid fa-desktop"></i> Items
+      </a>
+    </li>
+    <li>
+      <a href="status-pay.html">
+        <i class="fa-solid fa-box-open"></i> Status
+      </a>
+    </li>
+
+    <li class="section-label">Account</li>
+
+    <li>
+      <a href="cusItems.html">
+        <i class="fa-solid fa-house"></i> Home
+      </a>
+    </li>
+
+    <li class="logout">
+      <a href="#" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </li>
+  </ul>
+</aside>
+
+  <div class="content-wrapper">
+  <nav class="navbar">
+ <button class="open-btn" onclick="openSidebar()">
+  <i class="fa-solid fa-bars"></i>
+</button>
+
+  <img src="../images/MarketMate.png" class="logo" />
+
+  <div class="search-container">
+    <i class="fa fa-search"></i>
+    <input type="text" placeholder="Search" />
+  </div>
+
+  <div class="profile">
+    <img src="../images/ppft.png" />
+  </div>
+</nav>
+
+<div class="main-content">
+  <h1 class="page-title">Order Status</h1>
+
+  <div class="status-tabs">
+    <a href="status-pay.html" class="tab-btn">To Pay</a>
+    <a href="status-ship.html" class="tab-btn active">To Ship</a>
+    <a href="rcvd.html" class="tab-btn">To Receive</a>
+    <a href="cmpltd.html" class="tab-btn">Completed</a>
+  </div>
+
+  <div class="orders-container" id="ordersContainer">
+    <p style="text-align: center; color: #666;">Loading orders...</p>
+  </div>
+</div>
+  
+</div>
+</div>
+
+<script src="../js/api.js?v=5"></script>
+<script>
+  const sidebar = document.getElementById("sidebar");
+  const layout = document.getElementById("layout");
+
+  function closeSidebar() {
+    sidebar.classList.add("closed");
+    layout.classList.add("sidebar-closed");
+  }
+
+  function openSidebar() {
+    sidebar.classList.remove("closed");
+    layout.classList.remove("sidebar-closed");
+  }
+
+  function logout() {
+    TokenManager.removeToken();
+    window.location.href = 'Sign-In.html';
+  }
+
+  // Load orders that are paid (waiting to be shipped by admin)
+  async function loadOrders() {
+    try {
+      // Get orders with status "paid" - user paid, waiting for admin to confirm shipping
+      const orders = await API.getMyOrders();
+      const container = document.getElementById('ordersContainer');
+      
+      // Filter for paid orders (user paid, waiting for seller to ship)
+      const paidOrders = orders.filter(order => {
+        const status = (order.status || '').toLowerCase();
+        return status === 'paid';
+      });
+      
+      if (paidOrders.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #666;">No orders waiting to ship</p>';
+        return;
+      }
+      
+      container.innerHTML = '';
+      
+      paidOrders.forEach(order => {
+        const card = document.createElement('div');
+        card.className = 'order-card';
+        
+        const price = order.total_amount ? `₱ ${Number(order.total_amount).toLocaleString()}` : '₱ 0';
+        const imageUrl = order.image_url ? `../${order.image_url}` : '../images/iphonee.jpg';
+        
+        card.innerHTML = `
+          <div class="item-details">
+            <img src="${imageUrl}" alt="Item" class="order-item-img">
+            <div class="item-text">
+              <h3>${order.item_name || 'Product'}</h3>
+              <p class="variation">Order #${order.order_id}</p>
+              <p class="qty">x${order.quantity || 1}</p>
+              <p class="status-msg">*Waiting for seller to ship your order</p>
+            </div>
+          </div>
+
+          <div class="order-right-column">
+            <div class="order-ids">
+              <span class="order-id">Order ID : ${order.order_id}</span><br>
+              <span class="shipping-id">Payment : Paid</span>
+            </div>
+
+            <div class="total-section">
+              <span class="total-label">Total : </span>
+              <span class="total-price">${price}</span>
+            </div>
+          </div>
+        `;
+        
+        container.appendChild(card);
+      });
+    } catch (error) {
+      console.error('Error loading orders:', error);
+      document.getElementById('ordersContainer').innerHTML = '<p style="text-align: center; color: #666;">Error loading orders</p>';
+    }
+  }
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', loadOrders);
+</script>
+
+
+</body>
+</html>

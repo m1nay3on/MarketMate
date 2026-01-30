@@ -5,6 +5,89 @@ let addItemVariants = [];
 let editItemVariants = [];
 let currentEditItemId = null;
 
+// Store for pending image uploads
+let addItemPendingImage = null;
+let editItemPendingImage = null;
+
+// Image Upload Functions
+function setupImageUpload() {
+    // Add Item Modal - Upload button
+    const addUploadBtn = document.getElementById('addItemUploadBtn');
+    const addImageInput = document.getElementById('addItemImageInput');
+    const addDeleteBtn = document.getElementById('addItemDeleteImgBtn');
+    
+    if (addUploadBtn && addImageInput) {
+        addUploadBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            addImageInput.click();
+        });
+        
+        addImageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                addItemPendingImage = file;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    document.getElementById('previewImg').src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+    
+    if (addDeleteBtn) {
+        addDeleteBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            addItemPendingImage = null;
+            document.getElementById('previewImg').src = '../images/iphonee.jpg';
+            if (addImageInput) addImageInput.value = '';
+        });
+    }
+    
+    // Edit Item Modal - Upload button
+    const editUploadBtn = document.getElementById('editItemUploadBtn');
+    const editImageInput = document.getElementById('editItemImageInput');
+    const editDeleteBtn = document.getElementById('editItemDeleteImgBtn');
+    
+    if (editUploadBtn && editImageInput) {
+        editUploadBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            editImageInput.click();
+        });
+        
+        editImageInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file && currentEditItemId) {
+                try {
+                    // Upload immediately for edit mode
+                    const result = await API.uploadItemImage(currentEditItemId, file);
+                    document.getElementById('editPreviewImg').src = result.image_url;
+                    alert('Image uploaded successfully!');
+                } catch (error) {
+                    alert('Failed to upload image: ' + error.message);
+                }
+            } else if (file) {
+                // Preview only if no item ID yet
+                editItemPendingImage = file;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    document.getElementById('editPreviewImg').src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+    
+    if (editDeleteBtn) {
+        editDeleteBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            editItemPendingImage = null;
+            document.getElementById('editPreviewImg').src = '../images/iphonee.jpg';
+            if (editImageInput) editImageInput.value = '';
+        });
+    }
+}
+
 async function loadItems() {
     try {
         const items = await API.getItems();
@@ -269,7 +352,18 @@ async function createNewItem() {
     }
     
     try {
-        await API.createItem(itemData);
+        const newItem = await API.createItem(itemData);
+        
+        // Upload image if one was selected
+        if (addItemPendingImage && newItem.id) {
+            try {
+                await API.uploadItemImage(newItem.id, addItemPendingImage);
+            } catch (imgError) {
+                console.error('Image upload failed:', imgError);
+                // Item was created, just image failed
+            }
+        }
+        
         alert('Item created successfully');
         closeItemModal();
         // Clear inputs
@@ -277,7 +371,11 @@ async function createNewItem() {
         document.getElementById('itemName').value = '';
         document.getElementById('itemDesc').value = '';
         document.getElementById('itemPrice').value = '';
+        document.getElementById('previewImg').src = '../images/iphonee.jpg';
+        const addImageInput = document.getElementById('addItemImageInput');
+        if (addImageInput) addImageInput.value = '';
         addItemVariants = [];
+        addItemPendingImage = null;
         loadItems();
     } catch (error) {
         alert('Failed to create item: ' + error.message);
@@ -305,6 +403,7 @@ window.addEventListener('click', (event) => {
 if (window.location.pathname.includes('items.html')) {
     document.addEventListener('DOMContentLoaded', () => {
         loadItems();
+        setupImageUpload();
         
         // Add item button
         document.querySelector('.add-item-btn')?.addEventListener('click', openItemModal);

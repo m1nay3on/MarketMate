@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarketMate - Completed Orders</title>
+  <link rel="stylesheet" href="../css/cmpltd.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aoboshi+One&display=swap" rel="stylesheet">
+  <!-- Font Awesome for search icon -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+</head>
+<body>
+ <div class="layout" id="layout">
+
+<aside class="sidebar" id="sidebar">
+  <button class="close-btn" onclick="closeSidebar()">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <ul class="menu">
+    <li>
+      <a href="cusItems.html">
+        <i class="fa-solid fa-desktop"></i> Items
+      </a>
+    </li>
+    <li>
+      <a href="status-pay.html">
+        <i class="fa-solid fa-box-open"></i> Status
+      </a>
+    </li>
+
+    <li class="section-label">Account</li>
+
+    <li>
+      <a href="cusItems.html">
+        <i class="fa-solid fa-house"></i> Home
+      </a>
+    </li>
+
+    <li class="logout">
+      <a href="#" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </li>
+  </ul>
+</aside>
+
+  <div class="content-wrapper">
+  <nav class="navbar">
+ <button class="open-btn" onclick="openSidebar()">
+  <i class="fa-solid fa-bars"></i>
+</button>
+
+  <img src="../images/MarketMate.png" class="logo" />
+
+  <div class="search-container">
+    <i class="fa fa-search"></i>
+    <input type="text" placeholder="Search" />
+  </div>
+
+  <div class="profile">
+    <img src="../images/ppft.png" />
+  </div>
+</nav>
+
+<div class="main-content">
+  <h1 class="page-title">Order Status</h1>
+
+  <div class="status-tabs">
+
+  <a href="status-pay.html" class="tab-btn">To Pay</a>
+
+  <a href="status-ship.html" class="tab-btn">To Ship</a>
+
+  <a href="rcvd.html" class="tab-btn">To Receive</a>
+
+  <a href="cmpltd.html" class="tab-btn active">Completed</a>
+
+</div>
+
+<div class="completed" id="completedContainer">
+  <p style="text-align: center; color: #666;">Loading completed orders...</p>
+</div>
+
+<!-- ADD REVIEW MODAL -->
+<div id="rateModal" class="modal">
+
+  <div class="add-review-box">
+
+    <span class="close">&times;</span>
+
+    <h1>Add Review</h1>
+
+    <div class="field">
+      <label>Item ID*</label>
+      <input type="text" id="reviewItemId" readonly>
+    </div>
+
+    <div class="field">
+      <label>Item Name*</label>
+      <input type="text" id="reviewItemName" readonly>
+    </div>
+
+    <div class="field">
+      <label>Rating</label>
+      <div class="stars exact-stars">
+        <span data-value="1">★</span>
+        <span data-value="2">★</span>
+        <span data-value="3">★</span>
+        <span data-value="4">★</span>
+        <span data-value="5">★</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Description*</label>
+      <textarea id="reviewDescription" placeholder="What can you say about the product?"></textarea>
+    </div>
+
+    <button class="submit-review">Submit Review</button>
+
+  </div>
+</div>
+
+<!-- TOAST MESSAGE -->
+<div id="toast" class="toast">
+  Please select a rating first
+</div>
+
+    </main>
+  </div>
+
+ <script src="../js/api.js?v=5"></script>
+ <script>
+
+// Global variables for rating modal
+let selectedRating = 0;
+let activeRateButton = null;
+let currentOrderData = null;
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const modal = document.getElementById("rateModal");
+  const spanClose = document.querySelector(".close");
+  const stars = document.querySelectorAll(".stars span");
+  const submitBtn = document.querySelector(".submit-review");
+
+  // Load completed orders
+  loadCompletedOrders();
+
+  // ================= RATE MODAL =================
+
+  spanClose.addEventListener("click", () => {
+    modal.classList.remove("show");
+  });
+
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.remove("show");
+  });
+
+  stars.forEach(star => {
+    star.addEventListener("click", () => {
+      selectedRating = star.dataset.value;
+
+      stars.forEach(s => {
+        s.classList.toggle("selected", s.dataset.value <= selectedRating);
+      });
+    });
+  });
+
+  submitBtn.addEventListener("click", async () => {
+
+    if (selectedRating === 0) {
+      showToastMessage("Please select a rating!");
+      return;
+    }
+
+    const description = document.getElementById("reviewDescription").value;
+    if (!description.trim()) {
+      showToastMessage("Please enter a review description!");
+      return;
+    }
+
+    // Debug: Log what we're sending
+    console.log("Current Order Data:", currentOrderData);
+    
+    // Check if item_id exists
+    if (!currentOrderData.item_id) {
+      console.error("Missing item_id! Order data:", currentOrderData);
+      showToastMessage("Error: Cannot find product ID for this order");
+      return;
+    }
+    
+    const reviewPayload = {
+      item_id: currentOrderData.item_id,
+      customer_name: currentOrderData.customer_name || 'Customer',
+      rating: parseFloat(selectedRating),
+      comment: description
+    };
+    console.log("Review data to send:", reviewPayload);
+
+    try {
+      // Submit review via API
+      await API.createReview(reviewPayload);
+
+      activeRateButton.classList.add("disabled");
+      activeRateButton.textContent = "Rated";
+      activeRateButton.disabled = true;
+
+      stars.forEach(s => s.classList.remove("selected"));
+      selectedRating = 0;
+      document.getElementById("reviewDescription").value = "";
+
+      modal.classList.remove("show");
+      showToastMessage("Review submitted successfully!");
+    } catch (error) {
+      console.error("Review submission error:", error);
+      showToastMessage("Failed to submit review: " + error.message);
+    }
+  });
+
+});
+
+// ================= LOAD COMPLETED ORDERS =================
+
+async function loadCompletedOrders() {
+  try {
+    // Get orders with status "completed" or "delivered"
+    const orders = await API.getMyOrders();
+    const container = document.getElementById('completedContainer');
+    
+    // Filter for completed/delivered orders
+    const completedOrders = orders.filter(order => {
+      const status = (order.status || '').toLowerCase();
+      return status === 'delivered' || status === 'completed';
+    });
+    
+    if (completedOrders.length === 0) {
+      container.innerHTML = '<p style="text-align: center; color: #666;">No completed orders</p>';
+      return;
+    }
+    
+    container.innerHTML = '';
+    
+    completedOrders.forEach(order => {
+      const card = document.createElement('div');
+      card.className = 'completed-card';
+      
+      const price = order.total_amount ? `${Number(order.total_amount).toLocaleString()}` : '0';
+      
+      card.innerHTML = `
+        <!-- PRODUCT IMAGE -->
+        <div class="order-image">
+          <img src="${order.image_url || '../images/iphonee.jpg'}" alt="Product">
+        </div>
+
+        <!-- ORDER DETAILS -->
+        <div class="order-details">
+          <h3>${order.item_name || 'Product'}</h3>
+          <p class="variant">Order #${order.order_id}</p>
+          <p class="quantity">x${order.quantity || 1}</p>
+          <p class="status">✔ Order Completed</p>
+        </div>
+
+        <!-- ORDER META -->
+        <div class="order-meta">
+          <p>Order ID: ${order.order_id}</p>
+          <p class="total-rate">
+            <strong>Order Total:</strong> ₱${price}
+            <button class="btn-rate" data-order='${JSON.stringify(order).replace(/'/g, "&#39;")}'>Rate</button>
+          </p>
+        </div>
+      `;
+      
+      container.appendChild(card);
+    });
+    
+    // Add click handlers for rate buttons
+    document.querySelectorAll('.btn-rate').forEach(btn => {
+      btn.addEventListener('click', function() {
+        if (this.classList.contains("disabled")) return;
+        
+        const orderData = JSON.parse(this.getAttribute('data-order').replace(/&#39;/g, "'"));
+        openRateModal(this, orderData);
+      });
+    });
+  } catch (error) {
+    console.error('Error loading completed orders:', error);
+    document.getElementById('completedContainer').innerHTML = '<p style="text-align: center; color: #666;">Error loading orders</p>';
+  }
+}
+
+function openRateModal(btn, orderData) {
+  activeRateButton = btn;
+  currentOrderData = orderData;
+  
+  document.getElementById("reviewItemId").value = orderData.item_id || orderData.order_id;
+  document.getElementById("reviewItemName").value = orderData.item_name || 'Product';
+  
+  document.getElementById("rateModal").classList.add("show");
+}
+
+// ================= GLOBAL FUNCTIONS =================
+
+function showToastMessage(msg) {
+  const toast = document.getElementById("toast");
+  if (!toast) return;
+
+  toast.textContent = msg;
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2500);
+}
+
+
+// ===== SIDEBAR =====
+
+function closeSidebar() {
+  document.getElementById("sidebar")?.classList.add("closed");
+  document.getElementById("layout")?.classList.add("sidebar-closed");
+}
+
+function openSidebar() {
+  document.getElementById("sidebar")?.classList.remove("closed");
+  document.getElementById("layout")?.classList.remove("sidebar-closed");
+}
+
+function logout() {
+  TokenManager.removeToken();
+  window.location.href = 'Sign-In.html';
+}
+
+ </script>
+</div>  
+
+</body>
+</html>

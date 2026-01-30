@@ -188,8 +188,9 @@
           </div>
           <p>Item Image</p>
           <div class="image-actions">
-            <button class="btn-upload">Upload</button>
-            <button class="btn-delete-img">Delete</button>
+            <input type="file" id="addItemImageInput" accept="image/*" style="display: none;">
+            <button class="btn-upload" id="addItemUploadBtn">Upload</button>
+            <button class="btn-delete-img" id="addItemDeleteImgBtn">Delete</button>
           </div>
           <button class="btn-submit-item" onclick="createNewItem()">Add Item</button>
         </div>
@@ -234,8 +235,9 @@
           </div>
           <p>Item Image</p>
           <div class="image-actions">
-            <button class="btn-upload">Upload</button>
-            <button class="btn-delete-img">Delete</button>
+            <input type="file" id="editItemImageInput" accept="image/*" style="display: none;">
+            <button class="btn-upload" id="editItemUploadBtn">Upload</button>
+            <button class="btn-delete-img" id="editItemDeleteImgBtn">Delete</button>
           </div>
           <button class="btn-submit-item" id="saveChangesBtn">Save Changes</button>
         </div>

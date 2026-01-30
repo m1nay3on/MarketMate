@@ -67,10 +67,10 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
     # Create access token
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": str(user.id)}, expires_delta=access_token_expires
+        data={"sub": str(user.id), "role": user.role.value}, expires_delta=access_token_expires
     )
     
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer", "role": user.role.value}
 
 @router.post("/login/json", response_model=schemas.Token)
 async def login_json(user_data: schemas.UserLogin, db: Session = Depends(get_db)):
@@ -88,10 +88,10 @@ async def login_json(user_data: schemas.UserLogin, db: Session = Depends(get_db)
     # Create access token
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": str(user.id)}, expires_delta=access_token_expires
+        data={"sub": str(user.id), "role": user.role.value}, expires_delta=access_token_expires
     )
     
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer", "role": user.role.value}
 
 @router.get("/me", response_model=schemas.UserResponse)
 async def get_current_user_info(current_user: models.User = Depends(get_current_user)):

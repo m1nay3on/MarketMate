@@ -115,6 +115,7 @@
     
     <div class="status-options">
       <button class="btn-opt btn-shipped" onclick="selectShippingStatus('Shipped', 'shipped')">Shipped</button>
+      <button class="btn-opt btn-delivered" onclick="selectShippingStatus('Delivered', 'delivered')">Delivered</button>
       <button class="btn-opt btn-preparing" onclick="selectShippingStatus('Preparing', 'preparing')">Preparing</button>
       <button class="btn-opt btn-cancelled" onclick="selectShippingStatus('Canceled', 'cancelled')">Canceled</button>
     </div>
@@ -137,61 +138,10 @@
     sidebar.classList.remove("closed");
     layout.classList.remove("sidebar-closed");
   }
-
-    let currentShippingSpan = null;
-    let selectedShipText = "";
-    let selectedShipClass = "";
-
-    // 1. Initialize click events for shipping status badges
-    document.querySelectorAll('.status').forEach(span => {
-      span.style.cursor = "pointer";
-      span.addEventListener('click', function() {
-        openShippingModal(this);
-      });
-    });
-
-    function openShippingModal(element) {
-      currentShippingSpan = element;
-      
-      // Get Shipping ID from the first column of the row
-      const row = element.closest('tr');
-      const shippingId = row.cells[0].innerText;
-      
-      document.getElementById('displayShippingId').innerText = shippingId;
-      document.getElementById('shippingModal').style.display = 'flex';
-    }
-
-    function closeShippingModal() {
-      document.getElementById('shippingModal').style.display = 'none';
-      // Clear selection highlights
-      document.querySelectorAll('.btn-opt').forEach(b => b.classList.remove('selected'));
-    }
-
-    function selectShippingStatus(text, className) {
-      selectedShipText = text;
-      selectedShipClass = className;
-      
-      // Highlight the clicked button
-      document.querySelectorAll('.btn-opt').forEach(b => b.classList.remove('selected'));
-      event.target.classList.add('selected');
-    }
-
-    // 2. Handle Confirm Click for Shipping
-    document.getElementById('confirmShippingBtn').addEventListener('click', () => {
-      if (currentShippingSpan && selectedShipText !== "") {
-        // Update text and classes in the table row
-        currentShippingSpan.innerText = selectedShipText;
-        currentShippingSpan.className = 'status ' + selectedShipClass;
-        
-        closeShippingModal();
-      } else {
-        alert("Please select a shipping status!");
-      }
-    });
 </script>
 
-<script src="../js/api.js"></script>
-<script src="../js/shipping.js"></script>
+<script src="../js/api.js?v=5"></script>
+<script src="../js/shipping.js?v=5"></script>
 
 </body>
 </html>

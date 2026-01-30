@@ -14,15 +14,19 @@ class CustomerStatus(str, enum.Enum):
 
 class OrderStatus(str, enum.Enum):
     pending = "pending"
-    shipped = "shipped"
+    paid = "paid"           # User paid, waiting for admin to confirm/ship
+    shipped = "shipped"     # Admin confirmed shipping
+    delivered = "delivered" # Order delivered to customer
+    completed = "completed" # Order completed
     cancelled = "cancelled"
     new = "new"
 
 class PaymentMethod(str, enum.Enum):
-    gcash = "GCash"
-    cod = "COD"
-    card = "Card"
-    paypal = "PayPal"
+    GCash = "GCash"
+    Maya = "Maya"
+    COD = "COD"
+    Card = "Card"
+    PayPal = "PayPal"
 
 class PaymentStatus(str, enum.Enum):
     pending = "pending"
@@ -32,11 +36,16 @@ class PaymentStatus(str, enum.Enum):
 class ShippingStatus(str, enum.Enum):
     preparing = "preparing"
     shipped = "shipped"
+    delivered = "delivered"
     cancelled = "cancelled"
 
 class RewardStatus(str, enum.Enum):
     valid = "valid"
     expired = "expired"
+
+class UserRole(str, enum.Enum):
+    admin = "admin"
+    user = "user"
 
 
 # User Model
@@ -47,6 +56,7 @@ class User(Base):
     username = Column(String(50), unique=True, nullable=False, index=True)
     email = Column(String(100), unique=True, nullable=False, index=True)
     password_hash = Column(String(255), nullable=False)
+    role = Column(Enum(UserRole), default=UserRole.user)
     shop_name = Column(String(100), default="My Shop")
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
@@ -92,6 +102,7 @@ class Item(Base):
     price = Column(DECIMAL(10, 2), nullable=False)
     image_url = Column(String(500))
     rating = Column(DECIMAL(2, 1), default=0.0)
+    is_deleted = Column(Integer, default=0)  # Soft delete flag: 0=active, 1=deleted
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
