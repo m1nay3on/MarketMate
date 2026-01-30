@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Aoboshi One', serif;
+  font-family: 'Aoboshi One', 'serif';
 }
 
 body {
@@ -30,7 +30,7 @@ body {
   align-items: center;
   padding: 0 25px;
   z-index: 1000;
-    gap: 15px;
+  gap: 15px;
 
 }
 
@@ -244,72 +244,7 @@ body {
 }
 
 
-/* Table Container styling */
-.table-container {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  overflow-y: auto; /* Adds a scrollbar if you have TOO many orders */
 
-  /* ADD THIS LINE */
-  flex: 1; 
-  
-   /* Optional: adds a little gap at the very bottom */
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-}
-
-th {
-  padding: 15px;
-  border-bottom: 2px solid #eee;
-  color: #555;
-  font-size: 14px;
-  text-transform: uppercase;
-}
-
-td {
-  padding: 15px;
-  border-bottom: 1px solid #eee;
-  color: #333;
-  font-size: 15px;
-}
-
-tr:hover {
-  background-color: #f9f9f9;
-}
-
-/* Status Badge Styling */
-.status {
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-}
-
-.status.delivered { background: #e6ffed; color: #28a745; }
-.status.pending { background: #fff9db; color: #f08c00; }
-.status.shipped { background: #e7f5ff; color: #228be6; }
-.status.cancelled { background: #fff5f5; color: #fa5252; }
-
-
-/* Header styling */
-.header-flex h1 {
-  font-size: 2.5rem;
-}
-
-.add-item-btn {
-  background-color: #1f2f3f;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 8px;
-  font-size: 20px;
-  cursor: pointer;
-}
 
 /* Grid Layout */
 .items-grid {
@@ -341,18 +276,7 @@ tr:hover {
   transform: translateY(-5px);
 }
 
-.delete-btn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: red;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-}
+
 
 .image-placeholder img {
   max-width: 100%;
@@ -384,37 +308,6 @@ tr:hover {
   font-size: 18px; /* Makes the star pop more like in your screenshot */
 }
 
-/* Card Buttons */
-/* Container for the buttons */
-.card-actions {
-  display: flex;
-  justify-content: center; /* Centers the buttons horizontally */
-  gap: 4px;               /* Space between the two buttons */
-  margin-top: 10px;
-  margin-bottom: 10px;     /* Added spacing at the bottom of the card */
-}
-
-.btn-edit, .btn-reviews {
-  /* Removed flex: 1 to prevent stretching */
-  width: 95px;            /* Set a fixed width for a smaller look */
-  padding: 10px 0;         /* Vertical padding only since width is fixed */
-  border-radius: 25px;     /* Higher value for the pill/capsule shape */
-  border: none;
-  font-size: 10px;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.btn-edit {
-  background-color: #104a61;
-  color: white;
-}
-
-.btn-reviews {
-  background-color: #f7944d;
-  color: white;
-  
-}
 
 /* Floating Main Cart Button */
 .cart-btn-main {
@@ -532,8 +425,8 @@ tr:hover {
   border-radius: 4px;
   background-color: white;
   resize: none; /* Prevents user from manually resizing and breaking your layout */
-  font-family: inherit; /* Ensures the font matches your inputs */
 }
+
 .form-group label {
   display: block;
   font-size: 14px;
@@ -647,3 +540,136 @@ tr:hover {
   cursor: pointer;
 }
 
+
+/* Checkout Modal Specifics */
+.checkout-container {
+  background-color: #d9d9d9; /* The grey background from your design */
+  width: 800px;
+  padding: 30px 50px;
+  border-radius: 30px;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.close-checkout {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.checkout-container h2 {
+  font-size: 26 px;
+  margin-bottom: 20px;
+  font-weight: normal;
+}
+
+.checkout-section {
+  margin-bottom: 10px;
+}
+
+.checkout-section label {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.white-box {
+  background: white;
+  padding: 15px;
+  border: 1px solid #ccc;
+}
+
+
+.customer-info p {
+  font-size: 13px; /* Adjust this number to make it even smaller or larger */
+  line-height: 1.4; /* Improves readability when font is small */
+  margin-bottom: 2px;
+}
+
+/* Parcel Section Styling */
+.parcel-box {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.parcel-box img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.parcel-details h3 {
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.parcel-details p {
+  font-size: 11px;
+  color: #555;
+}
+
+.parcel-price {
+  font-size: 16px !important;
+  color: black !important;
+  margin-top: 5px;
+}
+
+/* Inputs and Dropdowns */
+/* 1. Base styles for ALL checkout fields (Voucher, Shipping, Payment) */
+.checkout-input {
+  width: 100%;
+  padding: 12px 15px; /* Standard padding for the Voucher input */
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* 2. Specific styles for DROPDOWNS ONLY (Shipping & Payment) */
+select.checkout-input {
+  padding-left: 40px; /* Extra room for the arrow on the left */
+  cursor: pointer;
+
+  /* Remove default browser arrow */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  /* Add custom arrow on the LEFT */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 12px center; 
+  background-size: 16px;
+}
+
+/* Hide default arrow for Internet Explorer */
+select.checkout-input::-ms-expand {
+  display: none;
+}
+/* Footer and Button */
+.checkout-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.btn-final-checkout {
+  background-color: #ff8c32; /* Match your orange */
+  color: white;
+  border: none;
+  padding: 10px 35px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-final-checkout:hover {
+  background-color: #e67e22;
+}

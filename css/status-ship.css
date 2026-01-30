@@ -244,57 +244,6 @@ body {
 }
 
 
-/* Table Container styling */
-.table-container {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  overflow-y: auto; /* Adds a scrollbar if you have TOO many orders */
-
-  /* ADD THIS LINE */
-  flex: 1; 
-  
-   /* Optional: adds a little gap at the very bottom */
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-}
-
-th {
-  padding: 15px;
-  border-bottom: 2px solid #eee;
-  color: #555;
-  font-size: 14px;
-  text-transform: uppercase;
-}
-
-td {
-  padding: 15px;
-  border-bottom: 1px solid #eee;
-  color: #333;
-  font-size: 15px;
-}
-
-tr:hover {
-  background-color: #f9f9f9;
-}
-
-/* Status Badge Styling */
-.status {
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-}
-
-.status.delivered { background: #e6ffed; color: #28a745; }
-.status.pending { background: #fff9db; color: #f08c00; }
-.status.shipped { background: #e7f5ff; color: #228be6; }
-.status.cancelled { background: #fff5f5; color: #fa5252; }
-
 
 /* Header styling */
 .header-flex h1 {

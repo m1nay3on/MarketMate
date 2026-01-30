@@ -236,6 +236,65 @@
     </div>
   </div>
 
+  <div id="checkoutModal" class="modal">
+  <div class="checkout-container">
+    <span class="close-checkout" onclick="closeCheckoutModal()">&times;</span>
+    
+    <h2>Checkout</h2>
+
+    <div class="checkout-section">
+      <label>Customer Information*</label>
+      <div class="white-box customer-info">
+        <p>Juan Dela Cruz</p>
+        <p>#1 Conchita St. M.dela Cruz Pasay City</p>
+        <p>+639983955224</p>
+      </div>
+    </div>
+
+    <div class="checkout-section">
+      <label>Parcel</label>
+      <div class="white-box parcel-box">
+        <img src="../images/iphonee.jpg" alt="iPhone 17">
+        <div class="parcel-details">
+          <h3>Apple iPhone 17 Pro Max</h3>
+          <p>Variation: Cosmic Orange, 256GB</p>
+          <p>x1</p>
+          <p class="parcel-price">78,000</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="checkout-section">
+      <label>Shipping</label>
+      <select class="checkout-input">
+        <option>J&T Express Delivery</option>
+        <option>Lalamove</option>
+        <option>Flash Express</option>
+      </select>
+    </div>
+
+    <div class="checkout-section">
+      <label>Voucher Code (Optional)</label>
+      <input type="text" class="checkout-input" placeholder="&^GFEJF489">
+    </div>
+
+    <div class="checkout-section">
+      <label>Payment Method</label>
+      <select class="checkout-input">
+        <option>GCash</option>
+        <option>Maya</option>
+        <option>Cash on Delivery</option>
+        <option>Credit/Debit Card</option>
+      </select>
+    </div>
+
+    <div class="checkout-footer">
+      <p>Order Total : 78,000</p>
+      <button class="btn-final-checkout">Checkout</button>
+    </div>
+  </div>
+</div>
+
 
 
   
@@ -255,101 +314,30 @@
     layout.classList.remove("sidebar-closed");
   }
 
-  const itemModal = document.getElementById("addItemModal");
-  const addBtn = document.querySelector(".add-item-btn");
 
-  // Open/Close
-  addBtn.onclick = () => itemModal.style.display = "flex";
-  function closeItemModal() { itemModal.style.display = "none"; }
+  const checkoutModal = document.getElementById("checkoutModal");
 
-  function createNewItem() {
-    const name = document.getElementById("itemName").value;
-    const price = document.getElementById("itemPrice").value;
-    
-    if (name && price) {
-      const grid = document.querySelector(".items-grid");
-      const newCard = document.createElement("div");
-      newCard.className = "item-card";
-      
-      newCard.innerHTML = `
-        <button class="delete-btn">×</button>
-        <div class="image-placeholder">
-          <img src="../images/iphonee.jpg" alt="${name}">
-        </div>
-        <div class="item-info">
-          <h3>${name}</h3>
-          <p class="rating"><span class="star">★</span> 0.0 / 5.0</p>
-          <div class="card-actions">
-            <button class="btn-edit">Edit</button>
-            <button class="btn-reviews">View Reviews</button>
-          </div>
-        </div>
-      `;
-      
-      grid.appendChild(newCard);
-      closeItemModal();
-      
-      // Clear inputs
-      document.querySelectorAll(".modal input, .modal textarea").forEach(i => i.value = "");
-    } else {
-      alert("Please fill in the Name and Price!");
-    }
+// 1. Setup Click Listeners for all "Buy Now" buttons
+document.addEventListener('click', function (e) {
+  if (e.target && e.target.classList.contains('btn-buy-now')) {
+    openCheckoutModal();
   }
+});
 
-    // Close if clicking background
-    window.onclick = (event) => {
-      if (event.target == itemModal) closeItemModal();
-    }
+function openCheckoutModal() {
+  checkoutModal.style.display = "flex";
+}
 
-    let currentEditCard = null; // Variable to keep track of which card we are editing
+function closeCheckoutModal() {
+  checkoutModal.style.display = "none";
+}
 
-  const editModal = document.getElementById("editItemModal");
+// Close if clicking background
+window.addEventListener('click', (event) => {
+  if (event.target == checkoutModal) closeCheckoutModal();
+});
 
-  // 1. Setup Click Listeners for all Edit buttons
-  // We use a "delegated" listener so it works even for items you just added
-  document.addEventListener('click', function (e) {
-    if (e.target && e.target.classList.contains('btn-edit')) {
-      openEditModal(e.target.closest('.item-card'));
-    }
-  });
-
-  function openEditModal(card) {
-    currentEditCard = card;
-    
-    // Extract current data from the card
-    const currentName = card.querySelector('h3').innerText;
-    // Assuming you might want to store the ID/Desc in data attributes or hidden fields 
-    // For now, we'll fill what we can see
-    document.getElementById("editItemName").value = currentName;
-    document.getElementById("editItemPrice").value = "78,000"; // Placeholder or pull from card if added
-    document.getElementById("editItemDesc").value = "Experience flagship power with the iPhone 17 Pro Max...";
-
-    editModal.style.display = "flex";
-  }
-
-  function closeEditModal() {
-    editModal.style.display = "none";
-    currentEditCard = null;
-  }
-
-  // 2. Handle the "Save Changes" Button
-  document.getElementById("saveChangesBtn").onclick = function() {
-    if (currentEditCard) {
-      const newName = document.getElementById("editItemName").value;
-      
-      // Update the card in the grid
-      currentEditCard.querySelector('h3').innerText = newName;
-      
-      // You can add logic here to update price, image, etc.
-      
-      closeEditModal();
-    }
-  };
-
-  // Close modal if clicking outside the content
-  window.addEventListener('click', (event) => {
-    if (event.target == editModal) closeEditModal();
-  });
+  
 </script>
 
 
